@@ -1,14 +1,16 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Header, Footer, Section } from './components'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <h1 className='text-3xl'>Hello</h1>
+        <div className='h-screen flex flex-col justify-between bg-[#FFC017]'>
+        <Header/>
+        <Section/>
+        <Footer/>
+        </div>
     </>
   )
 }
