@@ -3,7 +3,7 @@ import { AboutHeader, AboutFooter, AboutSection } from '../components'
 
 const About = () => {
   return (
-    <div className='h-screen flex flex-col justify-between bg-[#242424]'>
+    <div className='flex flex-col justify-between bg-[#242424]'>
         <AboutHeader/>
         <AboutSection/>
         <AboutFooter/>
