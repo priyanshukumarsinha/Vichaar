@@ -1,5 +1,6 @@
 import React from 'react'
 import { logo } from '../assests/images'
+import { motion } from 'framer-motion'
 
 const Header = () => {
   return (
@@ -10,12 +11,17 @@ const Header = () => {
         </div>
         <nav className='w-2/3 text-sm flex justify-end gap-6 items-center'>
             <ul className='flex justify-end gap-6'>
-                <li>Our Story</li>
-                <li>Membership</li>
-                <li>Write</li>
-                <li>Sign in</li>
+                <li className='cursor-pointer hover:text-gray-800 transition-all duration-100 ease-in-out'>Our Story</li>
+                <li className='cursor-pointer hover:text-gray-800 transition-all duration-100 ease-in-out'>Membership</li>
+                <li className='cursor-pointer hover:text-gray-800 transition-all duration-100 ease-in-out'>Write</li>
+                <li className='cursor-pointer hover:text-gray-800 transition-all duration-100 ease-in-out'>Sign in</li>
             </ul>
-            <button className='bg-black text-white py-2 px-4 rounded-full'>Get Started</button>
+            <motion.button 
+            whileTap={{ scale: 0.9}}
+            whileHover={{ scale: 1.05}}
+            className='bg-black text-white py-2 px-4 rounded-full transition-all duration-100 ease-in-out hover:drop-shadow-md'>
+                Get Started
+            </motion.button>
         </nav>
     </header>
   )
