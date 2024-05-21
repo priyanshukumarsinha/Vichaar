@@ -6,8 +6,8 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    // <LandingPage/>
-    <About/>
+    <LandingPage/>
+    // <About/>
   )
 }
 
