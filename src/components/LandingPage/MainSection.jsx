@@ -1,7 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-const Section = () => {
+const MainSection = () => {
   return (
     <section>
         <div className='flex flex-col items-center justify-center'>
@@ -9,7 +9,7 @@ const Section = () => {
             initial={{ x: -200}}
             animate={{ x: 0}}
             exit={{ x: -200}}
-            className='text-[90px] font-semibold transition-all duration-150 ease' 
+            className='text-[90px] font-semibold transition-all duration-100 ease' 
             style={{fontFamily : 'Playfair Display'}}>
                 Welcome to Vichaar.
             </motion.h1>
@@ -26,4 +26,4 @@ const Section = () => {
   )
 }
 
-export default Section
+export default MainSection

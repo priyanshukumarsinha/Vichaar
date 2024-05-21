@@ -1,17 +1,13 @@
 import { useState } from 'react'
-import { Header, Footer, Section } from './components'
+import LandingPage from './pages/LandingPage.jsx'
+import About from './pages/About.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <>
-        <div className='h-screen flex flex-col justify-between bg-[#FFC017]'>
-        <Header/>
-        <Section/>
-        <Footer/>
-        </div>
-    </>
+    // <LandingPage/>
+    <About/>
   )
 }
 

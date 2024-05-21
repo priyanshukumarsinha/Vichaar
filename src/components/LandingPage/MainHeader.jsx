@@ -1,8 +1,8 @@
 import React from 'react'
-import { logo } from '../assests/images'
+import { logo } from '../../assests/images'
 import { motion } from 'framer-motion'
 
-const Header = () => {
+const MainHeader = () => {
   return (
     <header className='flex justify-between w-full items-center border-b border-black py-5 px-[170px]'>
         <div className='w-1/3 flex items-center'>
@@ -27,4 +27,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default MainHeader
