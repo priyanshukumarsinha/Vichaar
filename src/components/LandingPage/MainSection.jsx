@@ -1,7 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import LinkButton from '../LinkButton'
 
-const MainSection = () => {
+const MainSection = ({signInToggle, setSignInToggle}) => {
   return (
     <section>
         <div className='flex flex-col items-center justify-center'>
@@ -15,12 +16,9 @@ const MainSection = () => {
             </motion.h1>
             <p className='text-lg text-black'>Discover stories, insights, and expertise from writers on any topic.</p>
             
-            <motion.button 
-            whileTap={{ scale: 0.9}}
-            whileHover={{ scale: 1.05}}
-            className='bg-black text-white py-2 px-[50px] rounded-full mt-[50px] hover:drop-shadow-md transition-all duration-100 ease-in-out'>
-                Start Reading
-            </motion.button>
+            <LinkButton className='px-[40px] mt-[50px]' onClick={() => {setSignInToggle(!signInToggle)}}>
+              Start Reading
+            </LinkButton>
         </div>
     </section>
   )

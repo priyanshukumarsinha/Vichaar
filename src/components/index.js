@@ -8,6 +8,7 @@ import MembershipSection from "./MembershipPage/MembershipSection";
 import SignInPopUp from "./SignInPopUp";
 import SignUpPopUp from "./SignUpPopUp";
 import Logo from "./Logo";
+import LinkButton from "./LinkButton";
 export { 
     MainHeader,
     MainFooter,
@@ -19,4 +20,5 @@ export {
     SignInPopUp,
     SignUpPopUp,
     Logo,
+    LinkButton,
  };

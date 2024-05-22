@@ -18,18 +18,6 @@ const router = createBrowserRouter([
         path: '/membership',
         Component: Membership
     },
-    // {
-    //     path: '/write',
-    //     element : <h1>Write is under Construction</h1>
-    // },
-    {
-        path: '/signin',
-        Component : SigninPage
-    },
-    {
-        path: '/signup',
-        Component : SignupPage
-    }
 ])
 
 export { router }

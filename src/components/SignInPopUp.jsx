@@ -2,10 +2,21 @@ import React from 'react'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook} from 'react-icons/fa'
 import { FaApple, FaRegEnvelope, FaTwitter, FaX, FaXTwitter } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
+import PopupFooter from './PopupFooter'
+import ClosePopupIcon from './ClosePopupIcon'
+import { motion } from 'framer-motion'
 
-const SignInPopUp = () => {
+const SignInPopUp = ({signInToggle, setSignInToggle}) => {
   return (
-    <div className='h-screen w-1/2 absolute top-0 bg-white translate-x-1/2 shadow-lg flex flex-col justify-center items-center'>
+    <div className='flex justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
+            <motion.div 
+    className='h-screen relative w-1/2 bg-white translate-x-1/2 shadow-lg flex flex-col justify-center items-center'
+    initial={{scale: 0.90, opacity: 0.5}}
+    animate={{scale: 1, opacity: 1}}
+    exit={{scale: 0.90, opacity: 0.5}}
+    >
+        <ClosePopupIcon signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
         <h1 className='w-full text-center text-3xl font-medium m-5 mt-0 p-5' style={{fontFamily: 'Playfair Display'}}>
             Welcome back.
         </h1>
@@ -31,15 +42,15 @@ const SignInPopUp = () => {
                 <span className='w-[70%] text-sm'>Sign in with email</span>
             </p>
         </div>
-        <p className='m-5'>
-        No account? <span className='font-semibold text-green-700 text-sm'><a href="">Create one</a></span>
+        <p className='m-5 text-sm'>
+        No account? <span className='font-semibold text-green-700 text-sm'><Link to={`/signup`}>Create one</Link></span>
         </p>
         <p className='text-xs m-5 p-5 text-gray-700'>
         Forgot email or trouble signing in? <a href="" className='underline text-gray-600 text-xs'>Get help.</a>
         </p>
-        <p className='text-xs mx-5 px-5 w-[70%] text-center text-gray-700'>
-        Click “Sign in” to agree to Vichaar's <a href="" className='underline'>Terms of Service</a> and acknowledge that Vichaar's <a href="" className='underline'>Privacy Policy</a> applies to you.
-        </p>
+        <PopupFooter/>
+        
+    </motion.div>
     </div>
   )
 }
