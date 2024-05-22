@@ -19,11 +19,11 @@ const MainHeader = ({signInToggle, setSignInToggle}) => {
                     <Link to='/write'>Write</Link>
                     {/* /write checks authentication ? sends to write page : sends to signin page */}
                 </li>
-                <li className='cursor-pointer hover:text-gray-800 transition-all duration-100 ease-in-out'>
-                    <Link to='/signin'>Sign In</Link>
+                <li onClick={() => {setSignInToggle(!signInToggle)}} className='cursor-pointer hover:text-gray-800 transition-all duration-100 ease-in-out'>
+                    Sign In
                 </li>
             </ul>
-            <LinkButton path = '/signup' onClick={() => {setSignInToggle(!signInToggle)}}>
+            <LinkButton onClick={() => {setSignInToggle(!signInToggle)}}>
               Get Started
             </LinkButton>
         </nav>

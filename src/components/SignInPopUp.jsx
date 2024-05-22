@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 
 const SignInPopUp = ({signInToggle, setSignInToggle}) => {
   return (
-    <div className='flex justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
+    <div className='flex z-50 justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
             <motion.div 
     className='h-screen relative w-1/2 bg-white translate-x-1/2 shadow-lg flex flex-col justify-center items-center'
     initial={{scale: 0.90, opacity: 0.5}}

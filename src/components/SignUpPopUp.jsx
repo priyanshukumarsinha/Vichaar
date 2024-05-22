@@ -7,16 +7,16 @@ import PopupFooter from './PopupFooter'
 import { motion } from 'framer-motion'
 import ClosePopupIcon from './ClosePopupIcon'
 
-const SignUpPopUp = ({signInToggle, setSignInToggle}) => {
+const SignUpPopUp = ({signUpToggle, setSignUpToggle}) => {
   return (
-    <div className='flex justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
+    <div className='flex z-50 justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
             <motion.div 
     className='h-screen relative w-1/2 bg-white translate-x-1/2 shadow-lg flex flex-col justify-center items-center'
     initial={{scale: 0.90, opacity: 0.5}}
     animate={{scale: 1, opacity: 1}}
     exit={{scale: 0.90, opacity: 0.5}}
     >
-        <ClosePopupIcon signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
+        <ClosePopupIcon signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/>
     <h1 className='w-full text-center text-3xl font-medium m-5 mt-0 p-5' style={{fontFamily: 'Playfair Display'}}>
         Join Vichaar. 
         {/* Create an account to start writing. */}

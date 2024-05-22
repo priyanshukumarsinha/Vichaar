@@ -9,11 +9,6 @@ function App() {
 
   return (
     <>
-    <LandingPage/>
-    {/* <About/> */}
-    {/* <Membership/> */}
-    {/* <SignInPopUp/> */}
-    {/* <SignUpPopUp/> */}
     </>
   )
 }

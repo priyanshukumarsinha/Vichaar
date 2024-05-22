@@ -10,8 +10,7 @@ const LandingPage = () => {
         <MainSection signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
         <MainFooter/>
         {signInToggle ? <SignInPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/> : null}
-        {signUpToggle ? <SignUpPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/> : null}
-        {/* <SignUpPopUp /> */}
+        {signUpToggle ? <SignUpPopUp signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
     </div>
   )
 }
