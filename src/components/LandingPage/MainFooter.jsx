@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const MainFooter = () => {
   return (
@@ -6,7 +7,7 @@ const MainFooter = () => {
         <ul className='flex gap-4 text-xs text-gray-600'>
             <li className='cursor-pointer hover:text-black'>Help</li>
             <li className='cursor-pointer hover:text-black'>Status</li>
-            <li className='cursor-pointer hover:text-black'>About</li>
+            <li className='cursor-pointer hover:text-black'><Link to='/about'>About</Link></li>
             <li className='cursor-pointer hover:text-black'>Careers</li>
             <li className='cursor-pointer hover:text-black'>Press</li>
             <li className='cursor-pointer hover:text-black'>Blog</li>
