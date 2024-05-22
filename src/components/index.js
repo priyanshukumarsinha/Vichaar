@@ -5,4 +5,18 @@ import AboutHeader from "./AboutPage/AboutHeader";
 import AboutFooter from "./AboutPage/AboutFooter";
 import AboutSection from "./AboutPage/AboutSection";
 import MembershipSection from "./MembershipPage/MembershipSection";
-export { MainHeader , MainFooter, MainSection, AboutHeader, AboutFooter, AboutSection, MembershipSection };
+import SignInPopUp from "./SignInPopUp";
+import SignUpPopUp from "./SignUpPopUp";
+import Logo from "./Logo";
+export { 
+    MainHeader,
+    MainFooter,
+    MainSection,
+    AboutHeader,
+    AboutFooter,
+    AboutSection,
+    MembershipSection,
+    SignInPopUp,
+    SignUpPopUp,
+    Logo,
+ };
