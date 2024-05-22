@@ -4,7 +4,7 @@ import { AboutHeader, AboutFooter, AboutSection } from '../components'
 const About = () => {
   return (
     <div className='flex flex-col justify-between bg-[#242424]'>
-        <AboutHeader/>
+        <AboutHeader isDark = {true}/>
         <AboutSection/>
         <AboutFooter/>
     </div>
