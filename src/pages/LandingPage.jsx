@@ -5,7 +5,7 @@ const LandingPage = () => {
   const [signInToggle, setSignInToggle] = useState(false)
   const [signUpToggle, setSignUpToggle] = useState(false)
   return (
-    <div className='h-screen flex flex-col justify-between'>
+    <div className='h-screen flex flex-col justify-between bg-[#FFC017]'>
         <MainHeader signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
         <MainSection signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
         <MainFooter/>
