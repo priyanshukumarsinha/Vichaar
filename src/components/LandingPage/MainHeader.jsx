@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Link, Navigate } from 'react-router-dom'
 import {Logo, LinkButton} from '../'
 
-const MainHeader = ({signInToggle, setSignInToggle}) => {
+const MainHeader = ({signInToggle, setSignInToggle, signUpToggle, setSignUpToggle}) => {
   return (
     <header className='flex justify-between w-full items-center border-b border-black py-5 px-[170px]'>
         <Logo/>
@@ -23,7 +23,7 @@ const MainHeader = ({signInToggle, setSignInToggle}) => {
                     Sign In
                 </li>
             </ul>
-            <LinkButton onClick={() => {setSignInToggle(!signInToggle)}}>
+            <LinkButton onClick={() => {setSignUpToggle(!signUpToggle)}}>
               Get Started
             </LinkButton>
         </nav>

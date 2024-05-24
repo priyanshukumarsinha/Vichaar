@@ -7,7 +7,7 @@ import PopupFooter from './PopupFooter'
 import { motion } from 'framer-motion'
 import ClosePopupIcon from './ClosePopupIcon'
 
-const SignUpPopUp = ({signUpToggle, setSignUpToggle}) => {
+const SignUpPopUp = ({signInToggle, setSignInToggle, signUpToggle, setSignUpToggle}) => {
   return (
     <div className='flex z-50 justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
             <motion.div 
@@ -36,7 +36,12 @@ const SignUpPopUp = ({signUpToggle, setSignUpToggle}) => {
         </p>
     </div>
     <p className='m-5 text-sm p-5 pt-0'>
-    Already have an account? <span className='font-semibold text-green-700 text-sm'><Link to={`/signin`}>Sign in</Link></span>
+    Already have an account? 
+    <span 
+    className='font-semibold text-green-700 text-sm cursor-pointer'
+    onClick={() => {setSignInToggle(!signInToggle); setSignUpToggle(!signUpToggle)}}
+    >{" "}Sign in
+    </span>
     </p>
     <PopupFooter/>
 </motion.div>

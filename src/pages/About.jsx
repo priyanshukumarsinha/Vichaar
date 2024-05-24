@@ -10,8 +10,8 @@ const About = () => {
         <AboutHeader isDark = {true} signInToggle= {signInToggle} setSignInToggle= {setSignInToggle} signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/>
         <AboutSection/>
         <AboutFooter/>
-        {signInToggle ? <SignInPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/> : null}
-        {signUpToggle ? <SignUpPopUp signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
+        {signInToggle ? <SignInPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle} signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
+        {signUpToggle ? <SignUpPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle} signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
     </div>
   )
 }

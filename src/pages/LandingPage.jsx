@@ -6,11 +6,11 @@ const LandingPage = () => {
   const [signUpToggle, setSignUpToggle] = useState(false)
   return (
     <div className='h-screen flex flex-col justify-between bg-[#FFC017]'>
-        <MainHeader signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
+        <MainHeader signInToggle= {signInToggle} setSignInToggle= {setSignInToggle} signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/>
         <MainSection signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/>
         <MainFooter/>
-        {signInToggle ? <SignInPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle}/> : null}
-        {signUpToggle ? <SignUpPopUp signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
+        {signInToggle ? <SignInPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle} signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
+        {signUpToggle ? <SignUpPopUp signInToggle= {signInToggle} setSignInToggle= {setSignInToggle} signUpToggle= {signUpToggle} setSignUpToggle= {setSignUpToggle}/> : null}
     </div>
   )
 }
