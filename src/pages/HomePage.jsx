@@ -1,5 +1,8 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
+import HomeHeader from '../components/HomePage/HomeHeader';
+import HomeSection from '../components/HomePage/HomeSection';
+import AboutFooter from '../components/AboutPage/AboutFooter';
 
 const HomePage = () => {
   const isAuthenticated = localStorage.getItem('user');
@@ -8,7 +11,11 @@ const HomePage = () => {
     return <Navigate to='/'/>
   };
   return (
-    <div>HomePage</div>
+    <div className='flex flex-col justify-between h-screen'>
+      <HomeHeader />
+      <HomeSection />
+      <AboutFooter />
+    </div>
   )
 }
 
