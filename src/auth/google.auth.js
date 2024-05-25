@@ -7,7 +7,7 @@ const auth = getAuth(app)
 const provider = new GoogleAuthProvider()
 
 
-export const googleLogin = async (userData, dispatch) => {
+export const googleLogin = async (userData, dispatch,navigate) => {
     try {
         if(!userData){
             const response = await signInWithPopup(auth, provider);

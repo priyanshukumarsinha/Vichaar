@@ -7,12 +7,41 @@ import { motion } from 'framer-motion'
 import ClosePopupIcon from './ClosePopupIcon'
 
 import {useSelector, useDispatch} from 'react-redux'
+import { Navigate, useNavigate } from "react-router-dom"
 
-import {googleLogin} from '../auth/google.auth'
+import { app } from "../../firebase.config"
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth"
+import { login as userLogin } from "../store/authSlice"
+
+import { useLocation } from 'react-router-dom'
 
 const SignUpPopUp = ({signInToggle, setSignInToggle, signUpToggle, setSignUpToggle}) => {
     const userData = useSelector((state) => state.auth.user)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    const auth = getAuth(app)
+    const provider = new GoogleAuthProvider()
+
+    const googleLogin = async () => {
+        try {
+            if(!userData){
+                const response = await signInWithPopup(auth, provider);
+                const userData = response.user.providerData[0];
+                dispatch(userLogin(userData));
+                localStorage.setItem('user', JSON.stringify(userData));
+                if(location.pathname === '/'){
+                    navigate('/home');
+                }
+                else{
+                    setSignInToggle(false);
+                    setSignUpToggle(false);
+                }
+            }
+        } catch (error) {
+            console.log("Error in googleLogin: ", error)
+        }
+    }
 
   return (
     <div className='flex z-50 justify-center items-center bg-transparent backdrop-blur-lg absolute w-full'>
@@ -29,7 +58,7 @@ const SignUpPopUp = ({signInToggle, setSignInToggle, signUpToggle, setSignUpTogg
     </h1>
     <div className='w-[350px] m-5 p-5 pb-0'>
         <p 
-        onClick={() => {googleLogin(userData, dispatch)}}
+        onClick={() => {googleLogin()}}
         className='flex justify-between items-center border border-black rounded-full p-2 m-3 cursor-pointer'>
             <FcGoogle className='text-2xl'/>
             <span className='w-[70%] text-sm'>Sign up with Google</span>
