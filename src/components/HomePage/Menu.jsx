@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { app } from "../../../firebase.config";
 import { logout as userLogout } from "../../store/authSlice";
+import { motion } from 'framer-motion';
 
 const Menu = () => {
     const userData = JSON.parse(localStorage.getItem('user'));
@@ -28,7 +29,11 @@ const Menu = () => {
         }
     }
     return (
-    <div className='w-full'>
+    <motion.div 
+    initial={{opacity : 0.5}}
+    animate={{opacity : 1}}
+    exit={{opacity : 0.5}}
+    className='w-full transition-all duration-500 ease-in-out'>
         <div className='px-6'>
             <ul>
                 <li className='flex gap-3 items-center py-2'>
@@ -77,7 +82,7 @@ const Menu = () => {
                 <li className='text-xs py-2 font-medium'>{hiddenEmail}</li>
             </ul>
         </div>
-    </div>
+    </motion.div>
   )
 }
 

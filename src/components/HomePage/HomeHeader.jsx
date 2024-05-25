@@ -12,6 +12,7 @@ const HomeHeader = () => {
     const [showSuggestionBlock, setShowSuggestionBlock] = useState(false);
     const [showSuggestion, setShowSuggestion] = useState(false);
     const [searchValue, setSearchValue] = useState('');
+    const [showMenu, setShowMenu] = useState(false);
   return (
     <header className='relative'>
         <div className='flex justify-between items-center p-3 px-[35px] bg-white shadow-sm'>
@@ -38,7 +39,9 @@ const HomeHeader = () => {
                 <div className='flex gap-2 justify-center items-center'>
                     <GoBell className='text-xl hover:text-gray-700 cursor-pointer text-gray-500'/>
                 </div>
-                <div className='relative cursor-pointer'>
+                <div className='relative cursor-pointer'
+                onClick={() => setShowMenu(!showMenu)}
+                >
                     <div className='absolute w-full h-full hover:bg-black/10 rounded-full'>
 
                     </div>
@@ -125,9 +128,13 @@ const HomeHeader = () => {
                 </div>
             )
         }
-        <div className='transition-all duration-100 ease-in-out w-72 drop-shadow-[0_0px_5px_rgba(0,0,0,0.1)] rounded-sm absolute top-14 z-99 right-0 overflow-y-scroll h-[calc(100vh-60px)] flex py-4 bg-white'>
-            <Menu />
-        </div>
+        {
+            showMenu && (
+                <div className='w-72 drop-shadow-[0_0px_5px_rgba(0,0,0,0.1)] rounded-sm absolute top-14 z-99 right-0 overflow-y-scroll h-[calc(100vh-60px)] flex py-4 bg-white'>
+                    <Menu />
+                </div>
+            )
+        }
     </header>
   )
 }
