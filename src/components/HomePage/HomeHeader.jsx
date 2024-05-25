@@ -125,7 +125,7 @@ const HomeHeader = () => {
                 </div>
             )
         }
-        <div className='transition-all duration-100 ease-in-out w-72 drop-shadow-[0_0px_5px_rgba(0,0,0,0.1)] rounded-sm absolute top-14 z-99 right-0 overflow-y-scroll h-[calc(100vh-60px)] flex px-8 py-8 bg-white'>
+        <div className='transition-all duration-100 ease-in-out w-72 drop-shadow-[0_0px_5px_rgba(0,0,0,0.1)] rounded-sm absolute top-14 z-99 right-0 overflow-y-scroll h-[calc(100vh-60px)] flex py-4 bg-white'>
             <Menu />
         </div>
     </header>
