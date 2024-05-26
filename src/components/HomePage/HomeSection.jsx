@@ -57,6 +57,7 @@ const HomeSection = () => {
       tags : ['React', 'Firebase', 'Firestore', 'Authentication'],
       readTime : '9 min read',
       reason : 'Because you follow Programming',
+      membersOnly: true,
     },
     {
       author: 'Jane Doe',
@@ -67,6 +68,7 @@ const HomeSection = () => {
       tags: ['CSS', 'Grid', 'Flexbox', 'Web Design'],
       readTime: '12 min read',
       reason: 'Because you follow Web Development',
+      membersOnly: false,
   },
   {
       author: 'John Smith',
@@ -77,6 +79,7 @@ const HomeSection = () => {
       tags: ['Python', 'Machine Learning', 'TensorFlow', 'scikit-learn'],
       readTime: '15 min read',
       reason: 'Because you follow Data Science',
+      membersOnly: false,
   },
   {
       author: 'Emily Clark',
@@ -87,6 +90,7 @@ const HomeSection = () => {
       tags: ['Node.js', 'Express', 'Web Development', 'JavaScript'],
       readTime: '10 min read',
       reason: 'Because you follow Backend Development',
+      membersOnly: false,
   },
 
   ]
@@ -176,6 +180,7 @@ const HomeSection = () => {
               tags = {blog.tags}
               readTime = {blog.readTime}
               reason = {blog.reason}
+              membersOnly = {blog.membersOnly}
               />
             ))
           }

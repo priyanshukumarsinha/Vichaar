@@ -2,6 +2,7 @@ import React from 'react'
 import { MdOutlineBookmarkAdd } from 'react-icons/md'
 import { GrSubtractCircle } from 'react-icons/gr'
 import { HiDotsHorizontal } from 'react-icons/hi'
+import { FaStar } from 'react-icons/fa'
 
 const BlogDesc = ({
     // props
@@ -13,6 +14,7 @@ const BlogDesc = ({
     tags,
     image,
     reason,
+    membersOnly = false,
 
 }) => {
     const userData = JSON.parse(localStorage.getItem('user'))
@@ -21,6 +23,14 @@ const BlogDesc = ({
         <div className='flex items-center gap-3 text-sm'>
             <img src={userData?.photoURL} alt="" className='w-7 h-7 rounded-full' />
             {author} · {date}
+            {
+                membersOnly && (
+                    <div className='flex items-center gap-2'>
+                        <FaStar className='text-yellow-500 text-sm'/>
+                        <span className='py-1 rounded-full text-sm'>Members-only</span>
+                    </div>
+                )
+            }
         </div>
         <div className='w-full flex mt-3'>
             {/* content */}
