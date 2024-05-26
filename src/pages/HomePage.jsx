@@ -31,7 +31,7 @@ const HomePage = () => {
       </div>
         )
       }
-      {/* <HomeSection /> */}
+      <HomeSection />
       {/* <AboutFooter /> */}
     </div>
   )

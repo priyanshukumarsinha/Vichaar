@@ -54,7 +54,7 @@ const HomeHeader = () => {
         {
             showSuggestionBlock && 
             (
-                <div className='transition-all duration-100 ease-in-out w-80 drop-shadow-[0_0px_10px_rgba(0,0,0,0.15)] rounded-sm absolute top-14 z-99 left-20 flex justify-center items-center px-5 py-8 bg-white'>
+                <div className='transition-all duration-100 z-50 ease-in-out w-80 drop-shadow-[0_0px_10px_rgba(0,0,0,0.15)] rounded-sm absolute top-14 z-99 left-20 flex justify-center items-center px-5 py-8 bg-white'>
                     {
                         showSuggestion && searchValue == '' ?  (
                             <>
