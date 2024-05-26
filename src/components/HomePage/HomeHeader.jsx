@@ -130,7 +130,7 @@ const HomeHeader = () => {
         }
         {
             showMenu && (
-                <div className='w-72 drop-shadow-[0_0px_5px_rgba(0,0,0,0.1)] rounded-sm absolute top-14 z-99 right-0 overflow-y-scroll h-[calc(100vh-60px)] flex py-4 bg-white'>
+                <div className='z-50 w-72 drop-shadow-[0_0px_5px_rgba(0,0,0,0.1)] rounded-sm absolute top-14 z-99 right-0 overflow-y-scroll h-[calc(100vh-60px)] flex py-4 bg-white'>
                     <Menu />
                 </div>
             )
