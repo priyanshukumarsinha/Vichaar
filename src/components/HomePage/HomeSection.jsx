@@ -4,6 +4,7 @@ import { GrAdd } from 'react-icons/gr'
 import { GoChevronLeft } from 'react-icons/go'
 import ListItemTopics from './ListItemTopics'
 import BlogDesc from './BlogDesc'
+import { IoMdCheckmarkCircleOutline } from 'react-icons/io'
 
 const HomeSection = () => {
   const [showAddTopic, setShowAddTopic] = useState(true)
@@ -178,12 +179,18 @@ const HomeSection = () => {
               />
             ))
           }
+          <div className='flex flex-col justify-center items-center py-16'>
+          <IoMdCheckmarkCircleOutline  className='text-2xl opacity-80'/>
+          <p className='text-sm p-4'>You're all caught up</p>
+            <button className='bg-green-600 text-gray-50 text-xs p-2 font-medium px-4 rounded-full'>Browse Recommended Stories</button>
+
+          </div>
         </div>
       </div>
 
       {/* right div */}
-      <div className='h-[50px] sticky top-0 right-0 w-1/3 border-l bg-black'>
-        x
+      <div className='h-[800px] fixed top-15 right-0 w-1/3 border-l'>
+        
       </div>
     </div>
   )
