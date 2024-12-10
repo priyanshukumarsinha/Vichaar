@@ -5,7 +5,7 @@ import LinkButton from "../LinkButton";
 const MainSection = ({ signInToggle, setSignInToggle }) => {
   return (
     <section>
-      <div className="h-screen flex flex-col items-center justify-center bg-[#FFC017]">
+      <div className="h-[calc(100vh-100px)] flex flex-col items-center justify-center bg-[#FFC017]">
         <motion.h1
           initial={{ x: -200 }}
           animate={{ x: 0 }}
