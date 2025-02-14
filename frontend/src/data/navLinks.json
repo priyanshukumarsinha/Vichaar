@@ -1,0 +1,12 @@
+[
+  {
+    "label": "Our Story",
+    "showOnMobile": false,
+    "path": "/about"
+  },
+  {
+    "label": "Github",
+    "showOnMobile": false,
+    "path": "/github"
+  }
+]

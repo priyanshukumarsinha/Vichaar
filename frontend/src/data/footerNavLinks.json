@@ -1,0 +1,14 @@
+[
+  {
+    "label": "About",
+    "path": "/about"
+  },
+  {
+    "label": "Privacy Policy",
+    "path": "/blog"
+  },
+  {
+    "label": "Terms of Service",
+    "path": "/blog"
+  }
+]

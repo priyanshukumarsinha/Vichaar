@@ -5,12 +5,12 @@ interface HeadingProps {
   className?: string;
 }
 
-const Heading = ({ children, className }: HeadingProps) => {
+const BlogHeading = ({ children, className }: HeadingProps) => {
   return (
-    <div className={`font-medium text-3xl font-gt-super ${className}`}>
+    <div className={`font-black text-[40px]  ${className}`}>
       {children}
     </div>
   );
 };
 
-export default Heading;
+export default BlogHeading;

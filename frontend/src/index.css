@@ -2,13 +2,13 @@
 
 @font-face {
   font-family: "gt-super";
-  src: url("../public/fonts/gt-super-400-normal.woff") format("woff");
+  src: url("/fonts/gt-super-400-normal.woff") format("woff");
 }
 
 .font-gt-super {
   font-family: "gt-super";
 }
 
-body{
+body {
   overflow-x: hidden;
 }
