@@ -51,7 +51,7 @@ const Profile = () => {
     <div className="min-h-screen">
       <BlogNavbar />
       <div className=" flex">
-        <div className="w-full lg:w-[65%] h-screen px-5 sm:px-10 md:px-20 lg:px-25 xl:px-40 py-12">
+        <div className="w-full lg:w-[65%] h-screen px-5 sm:px-10 md:px-20 lg:px-25 xl:px-40">
           <p
           className="text-4xl font-bold my-12"
           >Priyanshu Kumar Sinha</p>
