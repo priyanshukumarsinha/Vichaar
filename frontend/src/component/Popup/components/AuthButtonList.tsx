@@ -3,7 +3,7 @@ import { FaGithub } from "react-icons/fa6";
 import { AiOutlineMail } from "react-icons/ai";
 import AuthButton from "./AuthButton";
 
-const AuthButtonList = ({action} : {action: string}) => {
+const AuthButtonList = ({ action, fn }: { action: string; fn: () => void }) => {
   return (
     <>
       <AuthButton message={`${action} with Google`}>
@@ -12,7 +12,7 @@ const AuthButtonList = ({action} : {action: string}) => {
       <AuthButton message={`${action} with Github`}>
         <FaGithub />
       </AuthButton>
-      <AuthButton message={`${action} with email`}>
+      <AuthButton message={`${action} with email`} onClick={() => fn()}>
         <AiOutlineMail />
       </AuthButton>
     </>

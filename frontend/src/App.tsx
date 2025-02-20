@@ -1,7 +1,14 @@
+import AllBlogs from "./component/AllBlogs/AllBlogs";
 import Home from "./component/Home/Home";
+import { useIsAuthStore } from "./store/isAuthState";
 
 function App() {
-  return <Home />;
+  const isAuthenticated = useIsAuthStore((state) => state.isAuth);
+  return (
+    <>
+        {!isAuthenticated ? <Home /> : <AllBlogs />}
+    </>
+  );
 }
 
 export default App;

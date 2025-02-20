@@ -8,15 +8,17 @@ import AuthButtonList from "./components/AuthButtonList";
 const SigninPopup = ({
   fn,
   closePopup,
+  openSigninWithEmail
 }: {
   fn: () => void;
   closePopup: () => void;
+  openSigninWithEmail: () => void;
 }) => {
   return (
     <PopupDiv>
       <PopupHeading>Welcome back.</PopupHeading>
       <PopupClose fn={closePopup} /> {/* Close popup on click */}
-      <AuthButtonList action="Sign in" />
+      <AuthButtonList action="Sign in" fn={openSigninWithEmail}/>
       <PopupAlternate message="No Account?" linkText="Create one" fn={fn} />
       <PopupBottom>
         <p className="pb-10">Forgot email or trouble signing in? Get help.</p>

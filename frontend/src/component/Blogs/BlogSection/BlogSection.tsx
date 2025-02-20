@@ -1,4 +1,5 @@
 import BlogAuthor from "./BlogAuthor";
+import BlogContainer from "./BlogContainer";
 import BlogHTMLContent from "./BlogHTMLContent";
 import BlogIntro from "./BlogIntro";
 import ReactionFragement from "./ReactionFragement";
@@ -7,7 +8,7 @@ import Tags from "./Tags";
 const BlogSection = () => {
   const tags = ["Terms and Conditions", "Privacy", "Policy"];
   return (
-    <div className="min-h-screen xl:w-1/2 lg:w-[60%] md:w-[80%] sm:w-[90%] w-full px-5">
+    <BlogContainer>
       <BlogIntro
         heading="Medium Terms of Service"
         subHeading="Effective: September 3, 2021"
@@ -24,7 +25,11 @@ const BlogSection = () => {
         {tags && tags.map((tag) => <Tags key={tag} name={tag} />)}
       </div>
 
-      <ReactionFragement likeCount="10" isBookMarked={false} className="border-none" />
+      <ReactionFragement
+        likeCount="10"
+        isBookMarked={false}
+        className="border-none"
+      />
       <BlogAuthor
         className="my-5"
         src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
@@ -32,7 +37,7 @@ const BlogSection = () => {
         publishDate="Sep 3, 2021"
         readTime="7 min read"
       />
-    </div>
+    </BlogContainer>
   );
 };
 

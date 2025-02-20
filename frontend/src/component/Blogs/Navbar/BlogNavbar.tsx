@@ -3,6 +3,7 @@ import SearchInput from "../SearchInput/SearchInput";
 import BlogNavContainer from "./BlogNavContainer";
 import BlogNavLinks from "./BlogNavLinks";
 
+
 const BlogNavbar = () => {
   return (
     <BlogNavContainer className="flex justify-between w-full">

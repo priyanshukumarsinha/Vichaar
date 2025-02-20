@@ -8,12 +8,12 @@ const OtherOptions = ({ isBookMarked }: { isBookMarked: boolean }) => {
     <div className="flex gap-10">
       <div onClick={() => setBookMark(!bookMark)}>
         {bookMark ? (
-          <PiBookmarksSimpleFill className="text-xl opacity-80 hover:opacity-100" />
+          <PiBookmarksSimpleFill className="text-md opacity-60 hover:opacity-100 cursor-pointer" />
         ) : (
-          <PiBookmarksThin className="text-xl opacity-80 hover:opacity-100" />
+          <PiBookmarksThin className="text-md opacity-60 hover:opacity-100 cursor-pointer" />
         )}
       </div>
-      <CiShare1 className="text-xl opacity-80 hover:opacity-100" />
+      <CiShare1 className="text-md opacity-80 hover:opacity-100 cursor-pointer" />
     </div>
   );
 };

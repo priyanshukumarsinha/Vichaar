@@ -8,16 +8,18 @@ import AuthButtonList from "./components/AuthButtonList";
 const SignupPopup = ({
   fn,
   closePopup,
+  openSignupWithEmail
 }: {
   fn: () => void;
   closePopup: () => void;
+  openSignupWithEmail: () => void;
 }) => {
   return (
     <PopupDiv>
       <PopupHeading>Join Medium.</PopupHeading>
       <PopupClose fn={closePopup} />
 
-      <AuthButtonList action="Sign up" />
+      <AuthButtonList action="Sign up" fn={openSignupWithEmail}/>
 
       <PopupAlternate
         message="Already have an account?"

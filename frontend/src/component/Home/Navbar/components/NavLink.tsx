@@ -1,3 +1,4 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 interface NavLinkProps {
@@ -9,19 +10,23 @@ interface NavLinkProps {
   path?: string;
 }
 
-const NavLink = ({ link }: { link: NavLinkProps }) => {
+const NavLink = React.memo(({ link }: { link: NavLinkProps }) => {
   const navigate = useNavigate();
   return (
     <li
       className={`${
         link.showOnMobile ? "flex" : "hidden md:flex"
       } cursor-pointer ${link.className}`}
-      onClick={link.onClick? link.onClick : () => navigate(link.path ? link.path : "/")}
+      onClick={
+        link.onClick
+          ? link.onClick
+          : () => navigate(link.path ? link.path : "/")
+      }
       {...link.props}
     >
       {link.label}
     </li>
   );
-};
+});
 
 export default NavLink;

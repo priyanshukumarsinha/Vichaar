@@ -12,3 +12,33 @@
 body {
   overflow-x: hidden;
 }
+
+@layer components {
+  #first-paragraph {
+    @apply opacity-50;
+  }
+  .ce-header {
+    @apply opacity-50 transition-opacity duration-300; /* Default faded look */
+  }
+
+  .focused {
+    @apply opacity-100; /* Fully visible after first focus */
+  }
+
+  h1.ce-header {
+    @apply text-3xl font-bold;
+  }
+  h2.ce-header {
+    @apply text-2xl;
+  }
+  h3.ce-header {
+    @apply text-xl;
+  }
+  h4.ce-header {
+    @apply text-lg;
+  }
+  h5.ce-header,
+  h6.ce-header {
+    @apply text-base;
+  }
+}
