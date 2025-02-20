@@ -1,0 +1,33 @@
+[
+    {
+      "id": 1,
+      "authorName": "Priyanshu Kumar Sinha",
+      "authorImg": "",
+      "blogImg":
+        "https://miro.medium.com/v2/resize:fit:720/format:webp/1*Nbd2cZ8F-qN5EdCDLzQUNQ.png",
+      "heading": "How Much YouTube Paid Me For 320 Shorts in 3 Months",
+      "isBookMarked": false,
+      "likeCount": "100",
+      "publishDate": "Oct 1, 2021",
+      "readTime": "5",
+      "subHeading":
+        "In the first part, I will briefly describe my career for the context. In the second part, I will go through.",
+      "link": "https://www.google.com"
+    },
+    {
+      "id": 2,
+      "authorName": "Sneha R",
+      "authorImg":
+        "https://miro.medium.com/v2/resize:fit:720/format:webp/1*5-m-7RBfW6YnEPIwTHJvPw.jpeg",
+      "blogImg":
+        "https://miro.medium.com/v2/resize:fit:720/format:webp/1*5-m-7RBfW6YnEPIwTHJvPw.jpeg",
+      "heading": "How to Learn Full Stack Development in 2024",
+      "isBookMarked": false,
+      "likeCount": "100",
+      "publishDate": "Oct 1, 2021",
+      "readTime": "3",
+      "subHeading":
+        "In the first part, I will briefly describe my career for the context. In the second part, I will go through.",
+      "link": "https://www.vichaar.live"
+    }
+  ]
