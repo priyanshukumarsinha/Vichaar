@@ -3,7 +3,7 @@ import { TfiPencilAlt } from "react-icons/tfi";
 import BlogNavButton from "./BlogNavButton";
 import { useAuthStore } from "../../../store/authState";
 import AuthPopup from "../../Popup/AuthPopup";
-import { PiBellThin } from "react-icons/pi";
+// import { PiBellThin } from "react-icons/pi";
 import { CiSearch } from "react-icons/ci";
 import { useIsAuthStore } from "../../../store/isAuthState";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -74,9 +74,9 @@ const BlogNavLinks = () => {
               </BlogNavButton>
             </>
           )}
-          <BlogNavButton>
+          {/* <BlogNavButton>
             <PiBellThin className="text-2xl" />
-          </BlogNavButton>
+          </BlogNavButton> */}
         </div>
       )}
       {!isAuthenticated && <ProfileIcon className="hidden sm:flex" show = {showMenu} fn= {setShowMenu} />}
