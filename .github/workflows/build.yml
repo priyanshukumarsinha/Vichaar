@@ -20,12 +20,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Go to Frontend 
-        run: cd frontend
-
       - name: Install Dependencies
+        working-directory: frontend
         run: npm install
 
       - name: Run Build
+        working-directory: frontend
         run: npm run build
-
