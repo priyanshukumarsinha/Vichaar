@@ -4,7 +4,7 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 on:
   push:
-    branches-ignore:
+    branches:
       - main
 jobs:
   Deploy-Preview:
@@ -22,4 +22,3 @@ jobs:
       - name: Deploy Project Artifacts to Vercel
         working-directory: frontend
         run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-
