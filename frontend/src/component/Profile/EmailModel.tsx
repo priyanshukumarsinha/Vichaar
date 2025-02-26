@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import { useIsAuthStore } from "../../store/isAuthState";
 import BlogNavButton from "../Blogs/Navbar/BlogNavButton";
 import Modal from "./Modal";
