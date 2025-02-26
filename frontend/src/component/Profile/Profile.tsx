@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import BlogNavbar from "../Blogs/Navbar/BlogNavbar";
 import BlogDesc from "../AllBlogs/BlogDesc";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import EmailModal from "./EmailModel";
 import UsernameModal from "./UsernameModal";
 import DeleteAccountModal from "./DeleteAccountModal";
@@ -10,6 +10,7 @@ import ProfileSidebar from "./ProfileSidebar";
 import ProfileSettings from "./ProfileSettings";
 import ProfileTabs from "./ProfileTabs";
 import blogData from "../../data/blogData.json"
+import { useIsAuthStore } from "../../store/isAuthState";
 
 const Profile = () => {
   const currentUserId = "1";
@@ -17,13 +18,27 @@ const Profile = () => {
 
   const isAdmin = currentUserId === userId;
   
-  const [isShowHome, setIsShowHome] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/me") {
+      setIsShowHome(true);
+    } else {
+      setIsShowHome(false);
+    }
+  }, [location]);
+
+  const [isShowHome, setIsShowHome] = useState(location.pathname === "/me");
 
   const [showEmail, setShowEmail] = useState(false);
   const [showUsername, setShowUsername] = useState(false);
   // const [showChangePassword, setShowChangePassword] = useState(false);
   const [showProfileChange, setShowProfileChange] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
+
+
+  let user = useIsAuthStore((state) => state.user)
+
   
   return (
     <div className="min-h-screen">
@@ -32,7 +47,7 @@ const Profile = () => {
         <div className="w-full lg:w-[65%] h-screen px-5 sm:px-10 md:px-20 lg:px-25 xl:px-40">
           <p
           className="text-4xl font-bold my-12"
-          >Priyanshu Kumar Sinha</p>
+          >{user?.name}</p>
 
           <ProfileTabs isShowHome={isShowHome} setIsShowHome={setIsShowHome} isAdmin={isAdmin} />
 
@@ -63,8 +78,8 @@ const Profile = () => {
               <>
 
           <ProfileSettings
-      email="priyanshuk9066@gmail.com"
-      username="priyanshuk"
+      email={user?.email || ""}
+      username={user?.name || ""}
       onEmailClick={() => setShowEmail(true)}
       onUsernameClick={() => setShowUsername(true)}
       onProfileChangeClick={() => setShowProfileChange(true)}

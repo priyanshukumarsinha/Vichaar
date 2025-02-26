@@ -11,6 +11,8 @@ import ErrorMessage from "./ErrorMessage";
 import PopupInput from "./PopupInput";
 import GoBackMessage from "./GoBackMessage";
 import { useIsAuthStore } from "../../../store/isAuthState";
+import axios from "axios";
+import { BACKEND_URL } from "../../../constant";
 
 interface SigninEmailProps {
   closePopup: () => void;
@@ -23,6 +25,10 @@ const SigninEmail = ({ closePopup, goBack }: SigninEmailProps) => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const setisAuth = useIsAuthStore((state) => state.setIsAuth);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   // Handles a successful sign-up simulation
   const handleSuccess = () => {
@@ -33,18 +39,40 @@ const SigninEmail = ({ closePopup, goBack }: SigninEmailProps) => {
       closePopup();
       setisAuth(true);
       navigate("/");
+      window.location.href = "/";
       setError(false);
     }, 1000);
   };
 
-  // Simulates API call for signup
-  const requestHandler = () => {
+  // API call for signin
+  const requestHandler = async() => {
     setLoading(true);
+    
+    const data = {
+      email: email,
+      password: password
+    }
 
-    setTimeout(() => {
+    console.log("Signup in progress ...")
+
+    
+    const response = await axios.post(`${BACKEND_URL}/user/signin`, data);
+    
+    
+    if(response.data.status === "error"){
+      setError(true);
+      setErrorMessage(response.data.message);
+    }
+    else{
+      const token = response.data.data.token;
+      const user = response.data.data.user;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       console.log("Sign up successful");
       handleSuccess();
-    }, 2000);
+    }
+
+    setLoading(false);
   };
 
   if (loading) {
@@ -66,11 +94,11 @@ const SigninEmail = ({ closePopup, goBack }: SigninEmailProps) => {
             Enter the details associated with your account.
           </p>
           <PopupClose fn={closePopup} /> {/* Close button */}
-          {error && <ErrorMessage />}
+          {error && <ErrorMessage message={errorMessage}/>}
           {/* Input Fields */}
           <div className="mt-10 text-center">
-            <PopupInput label="Your email" type="email" />
-            <PopupInput label="Your password" type="password" />
+          <PopupInput label="Your email" type="email" value={email} changeValue={setEmail} />
+          <PopupInput label="Your password" type="password" value={password} changeValue={setPassword} />
           </div>
           <NavButton className="my-8 w-1/3" onClick={requestHandler}>
             Continue

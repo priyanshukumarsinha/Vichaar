@@ -3,16 +3,18 @@ import { ReactNode } from "react";
 const BlogNavButton = ({
   children,
   className,
+  disabled,
   onClick
 }: {
   children: ReactNode;
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
 }) => {
   return (
     <button
-    onClick={onClick}
-      className={`rounded-full opacity-60 hover:opacity-100 text-sm font-medium h-[35px] cursor-pointer px-4 ${className}`}
+    onClick={disabled ? ()=>{console.log("disabled")} : onClick}
+      className={`rounded-full  ${!disabled? '' :'opacity-60'} text-sm font-medium h-[35px] cursor-pointer px-4 ${className}`}
     >
       {children}
     </button>

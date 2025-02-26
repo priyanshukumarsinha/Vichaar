@@ -19,6 +19,7 @@
     "@editorjs/table": "^2.4.3",
     "@editorjs/underline": "^1.2.1",
     "@tailwindcss/vite": "^4.0.6",
+    "axios": "^1.8.1",
     "quill": "^2.0.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

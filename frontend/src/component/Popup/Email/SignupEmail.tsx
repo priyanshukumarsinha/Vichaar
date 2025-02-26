@@ -5,12 +5,14 @@ import PopupClose from "../components/PopupClose";
 import PopupDiv from "../components/PopupDiv";
 import PopupHeading from "../components/PopupHeading";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useNavigate } from "react-router-dom";
 import SuccessMessage from "./SuccessMessage";
 import PopupInput from "./PopupInput";
 import GoBackMessage from "./GoBackMessage";
 import ErrorMessage from "./ErrorMessage";
 import { useIsAuthStore } from "../../../store/isAuthState";
+import axios from "axios";
+import { BACKEND_URL } from "../../../constant";
+
 
 interface SignupEmailProps {
   closePopup: () => void;
@@ -21,8 +23,13 @@ const SignupEmail = ({ closePopup, goBack }: SignupEmailProps) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
-  const navigate = useNavigate();
   const setisAuth = useIsAuthStore((state) => state.setIsAuth);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   // Handles a successful sign-up simulation
   const handleSuccess = () => {
     setSuccess(true);
@@ -31,19 +38,43 @@ const SignupEmail = ({ closePopup, goBack }: SignupEmailProps) => {
     setTimeout(() => {
       closePopup();
       setisAuth(true);
-      navigate("/");
+      window.location.href = "/";
+      setSuccess(false);
       setError(false);
     }, 1000);
   };
 
-  // Simulates API call for signup
-  const requestHandler = () => {
+  // API call for signup
+  const requestHandler = async() => {
     setLoading(true);
+    
+    const data = {
+      email: email,
+      name: name,
+      password: password
+    }
 
-    setTimeout(() => {
+    console.log("Signup in progress ...")
+
+    
+    const response = await axios.post(`${BACKEND_URL}/user/signup`, data);
+
+    
+    
+    if(response.data.status === "error"){
+      setError(true);
+      setErrorMessage(response.data.message);
+    }
+    else{
+      const token = response.data.data.token;
+      const user = response.data.data.user;
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
       console.log("Sign up successful");
       handleSuccess();
-    }, 2000);
+    }
+
+    setLoading(false);
   };
 
   if (loading) {
@@ -65,12 +96,12 @@ const SignupEmail = ({ closePopup, goBack }: SignupEmailProps) => {
             Enter your details to create an account.
           </p>
           <PopupClose fn={closePopup} /> {/* Close button */}
-          {error && <ErrorMessage />}
+          {error && <ErrorMessage message={errorMessage}/>}
           {/* Input Fields */}
           <div className="mt-10 text-center">
-            <PopupInput label="Your name" type="name" />
-            <PopupInput label="Your email" type="email" />
-            <PopupInput label="Your password" type="password" />
+            <PopupInput label="Your name" type="name" value={name} changeValue={setName} />
+            <PopupInput label="Your email" type="email" value={email} changeValue={setEmail} />
+            <PopupInput label="Your password" type="password" value={password} changeValue={setPassword} />
           </div>
           {/* Action Button */}
           <NavButton className="my-8 w-1/3" onClick={requestHandler}>
