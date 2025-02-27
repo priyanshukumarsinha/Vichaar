@@ -50,6 +50,7 @@ const SignupEmail = ({ closePopup, goBack }: SignupEmailProps) => {
     
     const data = {
       email: email,
+      username: name,
       name: name,
       password: password
     }
