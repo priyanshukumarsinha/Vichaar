@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://backend.priyanshuk9066.workers.dev/api/v1"
+export const BACKEND_URL = "https://f0bd-103-211-17-173.ngrok-free.app/api/v1"

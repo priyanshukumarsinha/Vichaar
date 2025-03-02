@@ -1,9 +1,56 @@
+import { useState } from "react";
+import { useIsAuthStore } from "../../store/isAuthState";
 import BlogNavButton from "../Blogs/Navbar/BlogNavButton";
 import ProfileImage from "../ui/ProfileImage";
 import Modal from "./Modal";
+import axios from "axios";
+import { BACKEND_URL } from "../../constant";
 
-const ProfileModal = ({ fn }: { fn: Function }) => (
-  <Modal title="Profile Information" fn={fn}>
+const ProfileModal = ({ fn }: { fn: Function }) => {
+    const user = useIsAuthStore((state) => state.user);
+  const setUser = useIsAuthStore((state) => state.setUser);
+
+  const [name, setName] = useState(user?.name);
+  const [pronouns, setPronouns] = useState(user?.pronouns);
+  const [bio, setBio] = useState(user?.bio)
+  const [loading, setLoading] = useState(false);
+
+  const updateUser = async() => {
+    // fn(false)
+    setLoading(true);
+
+    const data = {
+      name,
+      pronouns,
+      bio
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+
+    // API call to update details
+    const response = await axios.put(`${BACKEND_URL}/user/update`, data, config);
+
+    console.log(response)
+
+    if(response.data.status === "success") {
+      // Update details in local storage
+      localStorage.setItem("user", JSON.stringify(response.data.data.user));
+    }
+
+    setUser(response.data.data.user);
+
+    setLoading(false);
+    fn(false);
+
+  }
+
+  return (
+    <Modal title="Profile Information" fn={fn}>
     <div className="flex flex-col gap-7">
       <div>
         <label className="text-xs font-medium">Profile Picture</label>
@@ -30,7 +77,8 @@ const ProfileModal = ({ fn }: { fn: Function }) => (
         <input
           type="text"
           className="outline-none bg-gray-100 rounded w-full py-2 px-3"
-          value="priyashuk"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
       </div>
       <div>
@@ -38,11 +86,16 @@ const ProfileModal = ({ fn }: { fn: Function }) => (
         <input
           type="text"
           className="outline-none bg-gray-100 rounded w-full py-2 px-3"
+          value={pronouns}
+          onChange={(e) => setPronouns(e.target.value)}
         />
       </div>
       <div>
         <label className="text-xs font-medium">Short bio</label>
-        <textarea className="outline-none bg-gray-100 rounded w-full py-2 h-20 px-3"></textarea>
+        <textarea className="outline-none bg-gray-100 rounded w-full py-2 h-20 px-3"
+        value={bio}
+        onChange={(e) => setBio(e.target.value)}
+        ></textarea>
       </div>
     </div>
     <div className="flex justify-end gap-3">
@@ -54,12 +107,13 @@ const ProfileModal = ({ fn }: { fn: Function }) => (
       </BlogNavButton>
       <BlogNavButton
         className="bg-green-800/40 text-white"
-        onClick={() => fn(false)}
+        onClick={updateUser}
       >
-        Save
+        {loading ? "Saving..." : "Save"}
       </BlogNavButton>
     </div>
   </Modal>
-);
+  )
+};
 
 export default ProfileModal;

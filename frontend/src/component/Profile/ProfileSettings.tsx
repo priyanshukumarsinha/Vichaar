@@ -4,19 +4,23 @@ import SettingItem from "./SettingItem";
 interface profilesettingProps {
     email: string,
     username: string,
+    name: string
     onEmailClick: () => void,
     onUsernameClick: () => void,
     onProfileChangeClick: () => void,
     onDeleteAccountClick: () => void,
+    onChangePasswordClick: () => void
 }
 
 const ProfileSettings = ({
     email,
     username,
+    name,
     onEmailClick,
     onUsernameClick,
     onProfileChangeClick,
     onDeleteAccountClick,
+    onChangePasswordClick,
   }: profilesettingProps) => {
     return (
       <>
@@ -30,7 +34,7 @@ const ProfileSettings = ({
               className="opacity-60 hover:opacity-100 flex gap-2 items-center cursor-pointer"
               onClick={onProfileChangeClick}
             >
-              {username}
+              {name}
               <ProfileImage className="w-6 h-6 text-xs" />
             </p>
           </div>
@@ -38,7 +42,7 @@ const ProfileSettings = ({
   
         {/* Change Password */}
         <div className="py-10 flex flex-col gap-7 border-b border-gray-200">
-          <SettingItem label="Change Password" value="***********" />
+          <SettingItem label="Change Password" onClick={onChangePasswordClick} value="***********" />
         </div>
   
         {/* Delete Account */}

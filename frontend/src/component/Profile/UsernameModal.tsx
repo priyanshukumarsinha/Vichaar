@@ -8,7 +8,7 @@ import { BACKEND_URL } from "../../constant";
 const UsernameModal = ({ fn }: { fn: Function }) => {
   const user = useIsAuthStore((state) => state.user);
   const setUser = useIsAuthStore((state) => state.setUser);
-  const [username, setUsername] = useState(user?.name || "");
+  const [username, setUsername] = useState(user?.username || "");
   const [loading, setLoading] = useState(false);
   const changeUsername = async () => {
     setLoading(true);
@@ -25,7 +25,7 @@ const UsernameModal = ({ fn }: { fn: Function }) => {
     };
 
     // API call to update email
-    const response = await axios.post(
+    const response = await axios.put(
       `${BACKEND_URL}/user/update`,
       data,
       config

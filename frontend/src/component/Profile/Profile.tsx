@@ -10,13 +10,12 @@ import ProfileSidebar from "./ProfileSidebar";
 import ProfileSettings from "./ProfileSettings";
 import ProfileTabs from "./ProfileTabs";
 import blogData from "../../data/blogData.json"
-import { useIsAuthStore } from "../../store/isAuthState";
+import { useIsAuthStore, User } from "../../store/isAuthState";
+import ChangePasswordModal from "./ChangePasswordModal";
+import axios from "axios";
+import { BACKEND_URL } from "../../constant";
 
 const Profile = () => {
-  const currentUserId = "1";
-  const userId = "1";
-
-  const isAdmin = currentUserId === userId;
   
   const location = useLocation();
 
@@ -32,12 +31,57 @@ const Profile = () => {
 
   const [showEmail, setShowEmail] = useState(false);
   const [showUsername, setShowUsername] = useState(false);
-  // const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
   const [showProfileChange, setShowProfileChange] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
 
 
-  let user = useIsAuthStore((state) => state.user)
+  const [user, setUser] = useState(useIsAuthStore((state) => state.user))
+
+  const currentUserId = user.id;
+
+  const [findingUser, setFindingUser] = useState<User | null>(null)
+
+  
+  const isSelf = (location.pathname === '/me' || location.pathname === '/u/')
+
+  const [isAdmin, setIsAdmin] = useState(isSelf);
+
+  const [loading, setLoading] = useState(isSelf);
+  
+  if(!isSelf){
+    const findingUsername = location.pathname.split("/")[2] || "me";
+  
+  useEffect(() => {
+    findUser();
+  }, [location.pathname]);  // Ensure it triggers when pathname changes
+
+  
+  const findUser = async () => {
+    try {
+      const response = await axios.post(`${BACKEND_URL}/user/u/${findingUsername}`);
+      setFindingUser(response.data.data.user);
+      setUser(response.data.data.user);
+      setLoading(false);  // Stop loading after the request
+      setIsAdmin(findingUser?.id === currentUserId)
+      setIsShowHome(true)
+      console.log(isAdmin)
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      setLoading(false);  // Stop loading in case of error
+    }
+  };
+  }
+  
+  
+
+  if(loading){
+    return (
+      <>
+        loading ...
+      </>
+    )
+  }
 
   
   return (
@@ -49,8 +93,11 @@ const Profile = () => {
           className="text-4xl font-bold my-12"
           >{user?.name}</p>
 
+          {
+            isAdmin &&
           <ProfileTabs isShowHome={isShowHome} setIsShowHome={setIsShowHome} isAdmin={isAdmin} />
 
+          }
           {
             isShowHome ? (
               <div>
@@ -79,11 +126,13 @@ const Profile = () => {
 
           <ProfileSettings
       email={user?.email || ""}
-      username={user?.name || ""}
+      username={user?.username || ""}
+      name = {user?.name || ""}
       onEmailClick={() => setShowEmail(true)}
       onUsernameClick={() => setShowUsername(true)}
       onProfileChangeClick={() => setShowProfileChange(true)}
       onDeleteAccountClick={() => setDeleteAccount(true)}
+      onChangePasswordClick = {() => setShowChangePassword(true)}
     />
               </>
             )
@@ -102,11 +151,13 @@ const Profile = () => {
           {
             showProfileChange && <ProfileModal fn={setShowProfileChange}/>
           }
+          {
+            showChangePassword && <ChangePasswordModal fn={setShowChangePassword} />
+          }
 
-          
         </div>
 
-        <ProfileSidebar isAdmin={isAdmin} fn={setIsShowHome} />
+        <ProfileSidebar isAdmin={isAdmin} fn={setIsShowHome} findingUser={findingUser || {}} />
       </div>
     </div>
   );
