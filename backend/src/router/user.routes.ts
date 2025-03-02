@@ -1,6 +1,9 @@
 import { Hono } from "hono";
 import {
+  changePassword,
   createUser,
+  deleteUser,
+  getUserusername,
   loginUser,
   updateUser,
 } from "../controller/user.controller";
@@ -17,6 +20,12 @@ userRoute.post("/signup", createUser);
 
 userRoute.post("/signin", loginUser);
 
-userRoute.post("/update", authMiddleware, updateUser);
+userRoute.put("/update", authMiddleware, updateUser);
+
+userRoute.delete("/delete", authMiddleware, deleteUser);
+
+userRoute.put("/password", authMiddleware, changePassword);
+
+userRoute.post("/u/:username", getUserusername);
 
 export { userRoute };
