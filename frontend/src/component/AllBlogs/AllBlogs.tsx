@@ -3,9 +3,12 @@ import BlogContainer from "../Blogs/BlogSection/BlogContainer";
 import BlogNavbar from "../Blogs/Navbar/BlogNavbar";
 import Footer from "../Home/Footer/Footer";
 import BlogDesc from "./BlogDesc";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { BACKEND_URL } from "../../constant";
 
 // some dummy data
-const blogData = [
+const dummyData = [
   {
     id: 1,
     authorName: "Priyanshu Kumar Sinha",
@@ -40,6 +43,21 @@ const blogData = [
 ];
 
 const AllBlogs = () => {
+  const [blogData, setBlogData] = useState(dummyData);
+
+  const getAllBlogs = async() => {
+    const response = await axios.get(`${BACKEND_URL}/blog/blogs`);
+    console.log(response.data.data.blogs)
+    setBlogData(response.data.data.blogs)
+  }
+
+
+  useEffect(() => {
+    getAllBlogs()
+  }, [])
+
+  // console.log(dummyData, blogData)
+
   return (
     <div className="w-full flex justify-center items-center flex-col">
       <BlogNavbar />
@@ -51,13 +69,13 @@ const AllBlogs = () => {
                 <BlogDesc
                   authorName={blog.authorName}
                   authorImg={blog.authorImg}
-                  blogImg={blog.blogImg}
-                  heading={blog.heading}
+                  blogImg={"https://miro.medium.com/v2/resize:fit:720/format:webp/1*5-m-7RBfW6YnEPIwTHJvPw.jpeg"}
+                  title={blog.title}
                   isBookMarked={blog.isBookMarked}
                   likeCount={blog.likeCount}
                   publishDate={blog.publishDate}
                   readTime={blog.readTime}
-                  subHeading={blog.subHeading}
+                  subHeading={blog.title}
                 />
               </Link>
             ))}

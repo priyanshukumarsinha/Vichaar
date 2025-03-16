@@ -14,7 +14,7 @@ createRoot(document.getElementById("root")!).render(
       <Route path="/" element={<App />} />
       <Route path="/about" element={<About />} />
       <Route path="/github" element={<Github />} />
-      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:id" element={<Blog />} />
       <Route path="/write" element={<Write />} />
       <Route path="/me" element={<Profile />} />
       <Route path="/settings" element={<Profile />} />

@@ -29,8 +29,23 @@ const content = `
     </p>
 `;
 
-const BlogHTMLContent = () => {
-  return <div className="" dangerouslySetInnerHTML={{ __html: content }} />;
+const BlogHTMLContent = ({content}: any) => {
+    console.log(content)
+    const data = content.blocks;
+    console.log(data);
+  return (
+    <div>
+        {data.map((item:any) => {
+            <>
+                {item.type == "paragraph" && (
+                    <p id= {item.id}>
+                        {item.data.text}
+                    </p>
+                )}
+            </>
+        })}
+    </div>
+  );
 };
 
 export default BlogHTMLContent;

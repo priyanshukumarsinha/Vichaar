@@ -1,15 +1,14 @@
 import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
-import Paragraph from "@editorjs/paragraph";
 import Table from "@editorjs/table";
 import ImageTool from "@editorjs/image";
 import List from "@editorjs/list";
 import Underline from "@editorjs/underline";
-// import Strikethrough from "@editorjs/marker"; // Use marker for strikethrough effect
 import { useEffect, useRef } from "react";
 
 const Editor = () => {
   const editor = useRef<EditorJS | null>(null);
+  const autosaverRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (editor.current) return;
@@ -27,15 +26,11 @@ const Editor = () => {
           },
         },
         paragraph: {
-          class: Paragraph as any,
-          inlineToolbar: [
-            "bold",
-            "italic",
-            "underline",
-            "strikethrough",
-            "link",
-          ], // ✅ Make sure the toolbar options are correct
+          config: {
+            placeholder: "",
+          },
         },
+        
         list: List as any,
         table: Table as any,
         image: {
@@ -79,14 +74,42 @@ const Editor = () => {
             });
           }
         }, 100); // Short delay to ensure rendering
+
+        startAutoSave(); 
+
       },
     });
 
+
     return () => {
+      stopAutoSave();
       editor.current?.destroy();
       editor.current = null;
     };
   }, []);
+
+  const startAutoSave = () => {
+    if (autosaverRef.current) return; // Prevent duplicate intervals
+
+    autosaverRef.current = window.setInterval(async () => {
+      if (editor.current) {
+        try {
+          const data = await editor.current.save();
+          localStorage.setItem("blog", JSON.stringify(data));
+        } catch (error) {
+          console.error("Auto-save failed:", error);
+        }
+      }
+    }, 5000); // Save every 5 seconds (1 second may be too frequent)
+  };
+
+  // ✅ Function to stop auto-saving
+  const stopAutoSave = () => {
+    if (autosaverRef.current) {
+      clearInterval(autosaverRef.current);
+      autosaverRef.current = null;
+    }
+  };
 
   return <div id="editorjs" className="font-gt-super p-5"></div>;
 };
