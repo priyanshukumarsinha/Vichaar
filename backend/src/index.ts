@@ -10,7 +10,7 @@ const app = new Hono();
 app.use(cors());
 app.use(prismaMiddleware);
 
-app.use("/api/v1/blog/*", authMiddleware);
+// app.use("/api/v1/blog/*", authMiddleware);
 
 app.route("/api/v1/user", userRoute);
 app.route("/api/v1/blog/", blog);

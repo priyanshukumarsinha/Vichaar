@@ -2,10 +2,13 @@ import { create } from "zustand";
 import authHandler from "../handlers/authHandler";
 const user = authHandler();
 
-interface User {
+export interface User {
     name?: string;
     email?: string;
     id?: string;
+    username?: string;
+    bio ?: string;
+    pronouns ?: string;
 }
 
 interface isAuthState {

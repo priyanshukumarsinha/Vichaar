@@ -4,7 +4,7 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-02-12",
   "vars": {
-    "DATABASE_URL": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZWFhZTk3YmQtNDQzZC00MmRiLTg3ZDYtYzNmNDdlZGEwYmIwIiwidGVuYW50X2lkIjoiNzMxZjJjZTU5YmE4Yzc2NmRlN2JlYjA2OTkzMTVkNWQ5ZDRmMjNlNzAwY2VhNzEwNDk2YjBlNDVlZDRhOWE0ZCIsImludGVybmFsX3NlY3JldCI6ImYzZGI2ZGVlLWMyMGItNDQzNS1hZDNlLWU3MThkY2UyZTJiZSJ9.Mb2kOyzQDm_WeameBKtC_bu7HnK18rI9uCvvCV6fy00",
+    "DATABASE_URL": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiMGYxNTFmZWItYmNhMi00OWUzLTkyNmQtOTkzY2I5YjUxM2M0IiwidGVuYW50X2lkIjoiNzMxZjJjZTU5YmE4Yzc2NmRlN2JlYjA2OTkzMTVkNWQ5ZDRmMjNlNzAwY2VhNzEwNDk2YjBlNDVlZDRhOWE0ZCIsImludGVybmFsX3NlY3JldCI6ImYzZGI2ZGVlLWMyMGItNDQzNS1hZDNlLWU3MThkY2UyZTJiZSJ9.GLYiWari0VSFb-_ZxR-DYtCZre_YwNevRPiBcaNjG9U",
     "JWT_SECRET": "abcdefghijklmnopqrstuvwxyz112233445566ABCD"
   }
 }

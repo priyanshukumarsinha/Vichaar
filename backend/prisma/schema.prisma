@@ -14,7 +14,12 @@ model User {
   name     String?
   password String
   username String  @unique
+  pronouns String?
+  bio      String?
+
   posts    Post[]
+  likedPosts   Like[]
+  comments Comment[]
 }
 
 model Post {
@@ -23,5 +28,35 @@ model Post {
   content   String
   published Boolean @default(false)
   authorId  String
+  authorName String
+  publishDate DateTime @default(now())
+  readTime Int @default(0)
+  likesCount     Int @default(0)
+  comentCount Int @default(0)
+  image     String?
+  likes    Like[]
+  comments Comment[]
+
   author    User    @relation(fields: [authorId], references: [id])
+}
+
+model Like {
+  id     String @id @default(uuid())
+  postId String
+  userId String
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Comment {
+  id        String  @id @default(uuid())
+  content   String
+  postId    String
+  authorId  String
+  authorName String
+  publishDate DateTime @default(now())
+
+  post   Post   @relation(fields: [postId], references: [id])
+  author User   @relation(fields: [authorId], references: [id])
 }

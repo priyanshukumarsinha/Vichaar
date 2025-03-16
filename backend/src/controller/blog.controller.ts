@@ -1,21 +1,35 @@
 import { Context } from "hono";
 import { jsonResponse } from "../utils/jsonResponse";
 import { createPostInput, updatePostInput } from "vichaar-common";
+import { z } from "zod";
 
 /*
 
 model Post {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   title     String
   content   String
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
+  published Boolean @default(false)
   authorId  String
+  authorName String
+  publishDate DateTime @default(now())
+  readTime Int @default(0)
+  likes     Int @default(0)
+  comentCount Int @default(0)
+  image     String?
+
+  author    User    @relation(fields: [authorId], references: [id])
 }
+
 
 */
 
-const blogSchema = createPostInput;
+const blogSchema = z.object({
+  title: z.string().min(3).max(255),
+  content: z.string().min(3),
+  published: z.boolean(),
+  image: z.string().optional(),
+});
 
 export const createBlog = async (c: Context) => {
   // Create a blog post
@@ -27,6 +41,20 @@ export const createBlog = async (c: Context) => {
     // Extract the user ID from the request
     const userId = c.get("userId");
 
+    // get author name
+    const author = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!author) {
+      return jsonResponse(c, 404, "error", "User not found");
+    }
+
+    // calculate read time
+    const readTime = Math.ceil(validatedBody.content.length / 200);
+
     // Create the blog post
     const post = await prisma.post.create({
       data: {
@@ -34,6 +62,8 @@ export const createBlog = async (c: Context) => {
         content: validatedBody.content,
         published: validatedBody.published,
         authorId: userId,
+        authorName: author?.name,
+        readTime,
       },
     });
 
@@ -48,7 +78,12 @@ export const createBlog = async (c: Context) => {
   }
 };
 
-const updateBlogSchema = updatePostInput;
+const updateBlogSchema = z.object({
+  id: z.string(),
+  title: z.string().min(3).max(255),
+  content: z.string().min(3),
+  published: z.boolean(),
+});
 
 export const updateBlog = async (c: Context) => {
   // Update a blog post
@@ -111,8 +146,6 @@ export const getBlog = async (c: Context) => {
     const id = c.req.param("id"); // Extract the `id` from the URL
     const prisma = c.get("prisma");
 
-    console.log(typeof prisma);
-
     // check if id was provided
     if (!id) {
       return jsonResponse(c, 400, "error", "Id not Provided");
@@ -135,6 +168,247 @@ export const getBlog = async (c: Context) => {
     });
   } catch (error) {
     console.error("Error fetching user:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
+
+// like a blog post
+export const likePost = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // Extract user Id
+    const userId = c.get("userId");
+
+    // Extract post Id
+    const postId = c.req.param("id");
+
+    // check if post exists
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!post) {
+      return jsonResponse(c, 404, "error", "Post not found");
+    }
+
+    // check if user has already liked the post
+    const like = await prisma.like.findFirst({
+      where: {
+        userId,
+        postId,
+      },
+    });
+
+    if (like) {
+      // delete like : dislike the post
+      await prisma.like.delete({
+        where: {
+          id: like.id,
+        },
+      });
+
+      // decrement the like count
+      await prisma.post.update({
+        where: {
+          id: postId,
+        },
+        data: {
+          likes: {
+            decrement: 1,
+          },
+        },
+      });
+
+      return jsonResponse(c, 200, "success", "Post disliked successfully");
+    }
+
+    // like the post
+    await prisma.like.create({
+      data: {
+        userId,
+        postId,
+      },
+    });
+
+    // increment the like count
+    await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        likes: {
+          increment: 1,
+        },
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Post liked successfully");
+  } catch (error) {
+    console.error("Error liking post:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
+
+// comment on a blog post
+export const commentOnPost = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // Extract user Id
+    const userId = c.get("userId");
+
+    // Extract post Id
+    const postId = c.req.param("id");
+
+    // Extract comment
+    const body = await c.req.json();
+    const comment = body.comment;
+
+    // check if post exists
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!post) {
+      return jsonResponse(c, 404, "error", "Post not found");
+    }
+
+    // create the comment
+    const newComment = await prisma.comment.create({
+      data: {
+        userId,
+        postId,
+        comment,
+      },
+    });
+
+    // increment the comment count
+    await prisma.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        comentCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Comment added successfully", {
+      comment: newComment,
+    });
+  } catch (error) {
+    console.error("Error commenting on post:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
+
+// get comments on a blog post
+export const getComments = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // Extract post Id
+    const postId = c.req.param("id");
+
+    // check if post exists
+    const post = await prisma.post.findUnique({
+      where: {
+        id: postId,
+      },
+    });
+
+    if (!post) {
+      return jsonResponse(c, 404, "error", "Post not found");
+    }
+
+    // get comments
+    const comments = await prisma.comment.findMany({
+      where: {
+        postId,
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Comments fetched successfully", {
+      comments,
+    });
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
+
+// delete a comment
+export const deleteComment = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // Extract user Id
+    const userId = c.get("userId");
+
+    // Extract comment Id
+    const commentId = c.req.param("id");
+
+    // check if comment exists
+    const comment = await prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+
+    if (!comment) {
+      return jsonResponse(c, 404, "error", "Comment not found");
+    }
+
+    // check if user is the author of the comment
+    if (comment.userId !== userId) {
+      return jsonResponse(c, 403, "error", "Unauthorized");
+    }
+
+    // delete comment
+    await prisma.comment.delete({
+      where: {
+        id: commentId,
+      },
+    });
+
+    // decrement the comment count
+    await prisma.post.update({
+      where: {
+        id: comment.postId,
+      },
+      data: {
+        comentCount: {
+          decrement: 1,
+        },
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Comment deleted successfully");
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
+
+// get all blogs
+export const getBlogs = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // get all blogs sorted by time
+
+    const blogs = await prisma.post.findMany({
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Blogs fetched successfully", {
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
     return jsonResponse(c, 500, "error", "Internal Server Error");
   }
 };

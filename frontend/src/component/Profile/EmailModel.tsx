@@ -27,7 +27,7 @@ const EmailModal = ({fn}:{fn:Function}) => {
     }
 
     // API call to update email
-    const response = await axios.post(`${BACKEND_URL}/user/update`, data, config);
+    const response = await axios.put(`${BACKEND_URL}/user/update`, data, config);
 
     if(response.data.status === "success") {
       // Update email in local storage

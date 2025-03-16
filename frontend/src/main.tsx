@@ -17,6 +17,8 @@ createRoot(document.getElementById("root")!).render(
       <Route path="/blog/:id" element={<Blog />} />
       <Route path="/write" element={<Write />} />
       <Route path="/me" element={<Profile />} />
+      <Route path="/u/" element={<Profile />} />
+      <Route path="/u/:username" element={<Profile />} />
       <Route path="/settings" element={<Profile />} />
     </Routes>
   </BrowserRouter>
