@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createBlog, getBlog, updateBlog, commentOnPost, deleteComment, getComments, likePost } from "../controller/blog.controller";
+import { createBlog, getBlog, updateBlog, commentOnPost, deleteComment, getComments, likePost, getBlogs } from "../controller/blog.controller";
 
 type Bindings = {
   DATABASE_URL: string;
@@ -26,6 +26,8 @@ blog.get(":id/comments", getComments);
 blog.delete(":id/comment/:commentId", deleteComment);
 
 blog.post(":id/like", likePost);
+
+blog.post("/blogs", getBlogs);
 
 
 export { blog };

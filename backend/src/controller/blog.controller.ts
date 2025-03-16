@@ -251,7 +251,6 @@ export const likePost = async (c: Context) => {
   }
 };
 
-
 // comment on a blog post
 export const commentOnPost = async (c: Context) => {
   const prisma = c.get("prisma");
@@ -393,4 +392,23 @@ export const deleteComment = async (c: Context) => {
   }
 };
 
+// get all blogs
+export const getBlogs = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // get all blogs sorted by time
 
+    const blogs = await prisma.post.findMany({
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Blogs fetched successfully", {
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching blogs:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
