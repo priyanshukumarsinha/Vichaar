@@ -17,28 +17,35 @@ const ChangePasswordModal = ({ fn }: { fn: Function }) => {
     setLoading(true);
 
     try {
-      const response = await axios.put(
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("User not authenticated");
+
+      const { data } = await axios.put(
         `${BACKEND_URL}/user/password`,
         { oldPassword, newPassword },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (response.data.status === "success") {
-        console.log("Password Updated Successfully!");
-      }
+      if (data.status !== "success")
+        throw new Error(data.message || "Password update failed");
 
-      fn(false);
+      console.log("Password Updated Successfully!");
     } catch (error: any) {
-      console.error("Error:", error?.response?.data?.message || "Unknown error");
-      setError(error?.response?.data?.message || "An unexpected error occurred.");
+      const errorMessage =
+        error?.response?.data?.message ||
+        error.message ||
+        "An unexpected error occurred.";
+      console.error("Error:", errorMessage);
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
+      fn(false);
     }
-
-    setLoading(false);
   }, [oldPassword, newPassword, fn]);
 
   return (
@@ -64,7 +71,10 @@ const ChangePasswordModal = ({ fn }: { fn: Function }) => {
       />
 
       <div className="flex justify-end gap-3 pt-5">
-        <BlogNavButton className="border border-red-900 text-green-600" onClick={() => fn(false)}>
+        <BlogNavButton
+          className="border border-red-900 text-green-600"
+          onClick={() => fn(false)}
+        >
           Cancel
         </BlogNavButton>
         <BlogNavButton
@@ -79,7 +89,15 @@ const ChangePasswordModal = ({ fn }: { fn: Function }) => {
   );
 };
 
-const InputField = ({ label, value, onChange }: { label: string; value: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
+const InputField = ({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
   <>
     <p className="text-sm mt-2 mb-2 opacity-70 font-medium">{label}</p>
     <input

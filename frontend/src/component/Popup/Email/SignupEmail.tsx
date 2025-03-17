@@ -13,7 +13,6 @@ import { useIsAuthStore } from "../../../store/isAuthState";
 import axios from "axios";
 import { BACKEND_URL } from "../../../constant";
 
-
 interface SignupEmailProps {
   closePopup: () => void;
   goBack: () => void;
@@ -44,38 +43,41 @@ const SignupEmail = ({ closePopup, goBack }: SignupEmailProps) => {
     }, 1000);
   };
 
-  // API call for signup
-  const requestHandler = async() => {
-    setLoading(true);
-    
-    const data = {
-      email: email,
-      username: name,
-      name: name,
-      password: password
-    }
+  const requestHandler = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+      setErrorMessage("");
 
-    console.log("Signup in progress ...")
+      console.log("Signup in progress...");
 
-    
-    const response = await axios.post(`${BACKEND_URL}/user/signup`, data);
+      const { data } = await axios.post(`${BACKEND_URL}/user/signup`, {
+        email,
+        username: name,
+        name,
+        password,
+      });
 
-    
-    
-    if(response.data.status === "error"){
-      setError(true);
-      setErrorMessage(response.data.message);
-    }
-    else{
-      const token = response.data.data.token;
-      const user = response.data.data.user;
+      if (data.status !== "success")
+        throw new Error(data.message || "Signup failed");
+
+      const { token, user } = data.data;
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
-      console.log("Sign up successful");
-      handleSuccess();
-    }
 
-    setLoading(false);
+      console.log("Signup successful");
+      handleSuccess();
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error.message ||
+        "An unexpected error occurred.";
+      console.error("Error:", errorMessage);
+      setError(true);
+      setErrorMessage(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
@@ -97,12 +99,27 @@ const SignupEmail = ({ closePopup, goBack }: SignupEmailProps) => {
             Enter your details to create an account.
           </p>
           <PopupClose fn={closePopup} /> {/* Close button */}
-          {error && <ErrorMessage message={errorMessage}/>}
+          {error && <ErrorMessage message={errorMessage} />}
           {/* Input Fields */}
           <div className="mt-10 text-center">
-            <PopupInput label="Your name" type="name" value={name} changeValue={setName} />
-            <PopupInput label="Your email" type="email" value={email} changeValue={setEmail} />
-            <PopupInput label="Your password" type="password" value={password} changeValue={setPassword} />
+            <PopupInput
+              label="Your name"
+              type="name"
+              value={name}
+              changeValue={setName}
+            />
+            <PopupInput
+              label="Your email"
+              type="email"
+              value={email}
+              changeValue={setEmail}
+            />
+            <PopupInput
+              label="Your password"
+              type="password"
+              value={password}
+              changeValue={setPassword}
+            />
           </div>
           {/* Action Button */}
           <NavButton className="my-8 w-1/3" onClick={requestHandler}>

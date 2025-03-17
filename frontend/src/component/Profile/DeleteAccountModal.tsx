@@ -14,41 +14,48 @@ const DeleteAccountModal = ({fn}:{fn:Function}) => {
 
     const [confirmation, setConfirmation] = useState("");
 
-  const deleteAccount = async() => {
-    setLoading(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
+    const deleteAccount = async () => {
+      try {
+        setLoading(true);
+        setError(null); // Reset previous errors
+    
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("User not authenticated");
+    
+        const { data } = await axios.delete(`${BACKEND_URL}/user/delete`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        if (data.status !== "success") throw new Error(data.message || "Account deletion failed");
+    
+        // Clear user data on successful deletion
+        localStorage.clear();
+        setUser({});
+        setIsAuth(false);
+        navigate("/");
+      } catch (error: any) {
+        console.error("Error deleting account:", error);
+        setError(error.response?.data?.message || error.message);
+      } finally {
+        setLoading(false);
+        fn(false);
+      }
     };
-
-    // API call to update email
-    const response = await axios.delete(
-      `${BACKEND_URL}/user/delete`,
-      config
-    );
-
-    if (response.data.status === "success") {
-      // Update email in local storage
-      localStorage.clear();
-    }
-
-    setIsAuth(false);
-
-    setUser({});
-
-    setLoading(false);
-    fn(false);
-    navigate("/");
-  }
+    
   return (
     <Modal title="Delete Account" fn={fn} >
       <p className="text-sm mb-5 opacity-70 font-medium">
         We’re sorry to see you go. Once your account is deleted, all of your content will be permanently gone.
       </p>
       <p className="text-sm opacity-70 font-medium">To confirm deletion, type “delete” below:</p>
+
+      {error && <p className="text-red-600 text-sm mt-3">{error}</p>}
+
       <input 
       value={confirmation}
       onChange={(e)=>setConfirmation(e.target.value)}

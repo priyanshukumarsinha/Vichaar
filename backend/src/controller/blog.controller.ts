@@ -417,20 +417,28 @@ export const getBlogs = async (c: Context) => {
   }
 };
 
-// find all blogs of a user
+// find all blogs of a user by username
 export const getUserBlogs = async (c: Context) => {
   const prisma = c.get("prisma");
   try {
-    // Extract user Id
-    const userId = c.get("userId");
+    // get username from params
+    const username = c.req.param("username");
+
+    // find user by username
+    const user = await prisma.user.findUnique({
+      where: {
+        username,
+      },
+    });
+
+    if (!user) {
+      return jsonResponse(c, 404, "error", "User not found");
+    }
 
     // get all blogs of the user
     const blogs = await prisma.post.findMany({
       where: {
-        authorId: userId,
-      },
-      orderBy: {
-        publishDate: "desc",
+        authorId: user.id,
       },
     });
 

@@ -10,40 +10,48 @@ const UsernameModal = ({ fn }: { fn: Function }) => {
   const setUser = useIsAuthStore((state) => state.setUser);
   const [username, setUsername] = useState(user?.username || "");
   const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState("");
+
   const changeUsername = async () => {
-    setLoading(true);
+    try {
+      setLoading(true);
+      setError(""); // Reset previous errors
 
-    const data = {
-      username: username,
-    };
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("User not authenticated");
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    };
+      const { data } = await axios.put(
+        `${BACKEND_URL}/user/update`,
+        { username },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    // API call to update email
-    const response = await axios.put(
-      `${BACKEND_URL}/user/update`,
-      data,
-      config
-    );
+      if (data.status !== "success")
+        throw new Error(data.message || "Username update failed");
 
-    if (response.data.status === "success") {
-      // Update email in local storage
-      localStorage.setItem("user", JSON.stringify(response.data.data.user));
+      const updatedUser = data.data.user;
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (error: any) {
+      console.error("Error updating username:", error);
+      setError(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+      fn(false);
     }
-
-    setUser(response.data.data.user);
-
-    setLoading(false);
-    fn(false);
   };
 
   return (
     <Modal title="Username" fn={fn}>
+      {error && (
+        <p className="text-red-600 text-sm font-medium py-2">{error}</p>
+      )}
       <input
         type="text"
         className="outline-none bg-gray-100 rounded w-full py-2 px-3 font-medium text-sm"

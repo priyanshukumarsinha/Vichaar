@@ -4,11 +4,7 @@ import { useIsAuthStore } from "./store/isAuthState";
 
 function App() {
   const isAuthenticated = useIsAuthStore((state) => state.isAuth);
-  return (
-    <>
-        {!isAuthenticated ? <Home /> : <AllBlogs />}
-    </>
-  );
+  return <>{!isAuthenticated ? <Home /> : <AllBlogs />}</>;
 }
 
 export default App;

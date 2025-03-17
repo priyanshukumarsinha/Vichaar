@@ -14,7 +14,7 @@ import ProfileModal from "./ProfileModal";
 import ChangePasswordModal from "./ChangePasswordModal";
 import { useIsAuthStore } from "../../store/isAuthState";
 import { useRef } from "react";
-
+import NotFound from "../NotFound";
 
 interface Blog {
   id: string;
@@ -48,10 +48,16 @@ const Profile = () => {
   const [showProfileChange, setShowProfileChange] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
 
+  const [error, setError] = useState("");
 
   const isAdminSet = useRef(false); // Prevents multiple updates
 
   useEffect(() => {
+    setUser(userStore);
+  }, [showEmail, showUsername, showChangePassword, showProfileChange]);
+
+  useEffect(() => {
+    setError("");
     if (!isSelf) {
       const username = location.pathname.split("/")[2] || "me";
       axios
@@ -66,7 +72,10 @@ const Profile = () => {
             isAdminSet.current = true; // Lock further updates
           }
         })
-        .catch(console.error)
+        .catch((error) => {
+          console.log(error);
+          setError("User not found");
+        })
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
@@ -74,6 +83,7 @@ const Profile = () => {
   }, [location.pathname]);
 
   useEffect(() => {
+    setError("");
     if (user?.username) {
       setLoading(true);
       axios
@@ -84,74 +94,86 @@ const Profile = () => {
     }
   }, [user]);
 
-  if (loading) {
-    return <>Loading...</>;
+  if (error) {
+    return <NotFound message={error} />;
   }
 
   return (
     <div className="min-h-screen">
       <BlogNavbar />
-      <div className="flex">
-        <div className="w-full lg:w-[65%] h-screen px-5 sm:px-10 md:px-20 lg:px-25 xl:px-40">
-          <p className="text-4xl font-bold my-12">{user?.name}</p>
-
-          {isAdmin && (
-            <ProfileTabs
-              isShowHome={isShowHome}
-              setIsShowHome={setIsShowHome}
-            />
-          )}
-
-          {isShowHome ? (
-            <div>
-              {blogData.length > 0 ? (
-                blogData.map((blog) => (
-                  <Link to={`/blog/${blog.id}`} key={blog.id}>
-                    <BlogDesc
-                      authorName={blog.authorName}
-                      authorImg={blog.authorImg}
-                      blogImg={blog.blogImg}
-                      title={blog.title}
-                      isBookMarked={blog.isBookMarked}
-                      likeCount={blog.likeCount}
-                      publishDate={blog.publishDate}
-                      readTime={blog.readTime}
-                      subHeading={blog.subHeading}
-                    />
-                  </Link>
-                ))
-              ) : (
-                <p>No blogs found.</p>
-              )}
-            </div>
-          ) : (
-            <ProfileSettings
-              email={user?.email || ""}
-              username={user?.username || ""}
-              name={user?.name || ""}
-              onEmailClick={() => setShowEmail(true)}
-              onUsernameClick={() => setShowUsername(true)}
-              onProfileChangeClick={() => setShowProfileChange(true)}
-              onDeleteAccountClick={() => setDeleteAccount(true)}
-              onChangePasswordClick={() => setShowChangePassword(true)}
-            />
-          )}
-
-          {showEmail && <EmailModal fn={setShowEmail} />}
-          {showUsername && <UsernameModal fn={setShowUsername} />}
-          {deleteAccount && <DeleteAccountModal fn={setDeleteAccount} />}
-          {showProfileChange && <ProfileModal fn={setShowProfileChange} />}
-          {showChangePassword && (
-            <ChangePasswordModal fn={setShowChangePassword} />
-          )}
+      {loading ? (
+        <div className="flex justify-center items-center h-96">
+          <p>Loading...</p>
         </div>
+      ) : (
+        <div className="flex">
+          <div className="w-full lg:w-[65%] h-screen px-5 sm:px-10 md:px-20 lg:px-25 xl:px-40">
+            <p className="text-4xl font-bold my-12">{user?.name}</p>
 
-        <ProfileSidebar
-          isAdmin={isAdmin}
-          fn={setIsShowHome}
-          findingUser={user || {}}
-        />
-      </div>
+            {isAdmin && (
+              <ProfileTabs
+                isShowHome={isShowHome}
+                setIsShowHome={setIsShowHome}
+              />
+            )}
+
+            {isShowHome ? (
+              <div>
+                {blogData.length > 0 ? (
+                  blogData.map((blog) => (
+                    <Link to={`/blog/${blog.id}`} key={blog.id}>
+                      <BlogDesc
+                        authorName={blog.authorName}
+                        authorImg={blog.authorImg}
+                        blogImg={blog.blogImg}
+                        title={blog.title}
+                        isBookMarked={blog.isBookMarked}
+                        likeCount={blog.likeCount}
+                        publishDate={blog.publishDate}
+                        readTime={blog.readTime}
+                        subHeading={blog.subHeading}
+                      />
+                    </Link>
+                  ))
+                ) : (
+                  <p className="h-[60vh] my-5 flex justify-center items-center bg-gray-100">
+                    <img
+                      src="https://static.tildacdn.net/tild3265-6337-4139-a339-323832653339/404.svg"
+                      alt="No Blogs Found"
+                      className="w-full"
+                    />
+                  </p>
+                )}
+              </div>
+            ) : (
+              <ProfileSettings
+                email={user?.email || ""}
+                username={user?.username || ""}
+                name={user?.name || ""}
+                onEmailClick={() => setShowEmail(true)}
+                onUsernameClick={() => setShowUsername(true)}
+                onProfileChangeClick={() => setShowProfileChange(true)}
+                onDeleteAccountClick={() => setDeleteAccount(true)}
+                onChangePasswordClick={() => setShowChangePassword(true)}
+              />
+            )}
+
+            {showEmail && <EmailModal fn={setShowEmail} />}
+            {showUsername && <UsernameModal fn={setShowUsername} />}
+            {deleteAccount && <DeleteAccountModal fn={setDeleteAccount} />}
+            {showProfileChange && <ProfileModal fn={setShowProfileChange} />}
+            {showChangePassword && (
+              <ChangePasswordModal fn={setShowChangePassword} />
+            )}
+          </div>
+
+          <ProfileSidebar
+            isAdmin={isAdmin}
+            fn={setIsShowHome}
+            findingUser={user || {}}
+          />
+        </div>
+      )}
     </div>
   );
 };
