@@ -11,12 +11,14 @@ import EditorJS from "@editorjs/editorjs";
 import Header from "@editorjs/header";
 import Paragraph from "@editorjs/paragraph";
 
-const BlogSection = ({id}: {id: string}) => {
+const BlogSection = ({ id }: { id: string }) => {
   const editorRef = useRef<EditorJS | null>(null);
 
+  const [loading, setLoading] = useState(true);
+
   const tags = ["Terms and Conditions", "Privacy", "Policy"];
-  const [blog, setBlog] = useState(null)
-  const [blogContent, setBlogContent] = useState(null)
+  const [blog, setBlog] = useState(null);
+  const [blogContent, setBlogContent] = useState(null);
 
   useEffect(() => {
     if (!editorRef.current) {
@@ -37,51 +39,62 @@ const BlogSection = ({id}: {id: string}) => {
     };
   }, [blogContent]);
 
-  console.log(blogContent)
+  console.log(blogContent);
 
-  
-  const getBlogById = async() => {
-    
+  const getBlogById = async () => {
     const response = await axios.get(`${BACKEND_URL}/blog/b/${id}`);
-    setBlog(response.data.data.blog)
-    console.log("blog : ", response.data.data.blog.content)
-    setBlogContent(JSON.parse(response.data.data.blog.content));
-  }
+    setBlog(response.data.data.blog);
+    const data = JSON.parse(response.data.data.blog.content);
+    const newData = { ...data, blocks: data.blocks.slice(1) };
+    console.log("blog : ", newData);
+    setBlogContent(newData);
+    setLoading(false);
+  };
 
-  useEffect(()=> {
+  useEffect(() => {
     getBlogById();
-  }, [])
-  
+  }, []);
+
   return (
     <BlogContainer>
-      <BlogIntro
-        heading={blog?.title}
-        subHeading="Effective: September 3, 2021"
-        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-        author="Priyanshu Kumar Sinha"
-        publishDate="Sep 3, 2021"
-        readTime="7 min read"
-        likeCount="10"
-        isBookMarked={false}
-      />
-      {/* <BlogHTMLContent content = {blogContent}/> */}
-      <div id="editorjs" className="p-0 text-justify"></div>
-      <div className="flex gap-3">
-        {tags && tags.map((tag) => <Tags key={tag} name={tag} />)}
-      </div>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <BlogIntro
+          heading={blog?.title}
+          subHeading={blog?.subHeading}
+          src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+          author={blog?.authorName}
+          publishDate={blog?.publishDate}
+          readTime={blog?.readTime}
+          likeCount={blog?.likeCount}
+          isBookMarked={false}
+        />
+      )}
+      {/* <BlogHTMLContent content = {blogContent}/>  */}
+      <div id="editorjs" className={`p-0  ${loading? "hidden": "block"}`}></div>
+      {loading ? (
+        <div>loading ...</div>
+      ) : (
+        <>
+          <div className="flex gap-3">
+            {tags && tags.map((tag) => <Tags key={tag} name={tag} />)}
+          </div>
 
-      <ReactionFragement
-        likeCount="10"
-        isBookMarked={false}
-        className="border-none"
-      />
-      <BlogAuthor
-        className="my-5"
-        src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-        author="Priyanshu Kumar Sinha"
-        publishDate="Sep 3, 2021"
-        readTime="7 min read"
-      />
+          <ReactionFragement
+            likeCount="10"
+            isBookMarked={false}
+            className="border-none"
+          />
+          <BlogAuthor
+            className="my-5"
+            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+            author={blog?.authorName}
+            publishDate={blog?.publishDate}
+            readTime={blog?.readTime}
+          />
+        </>
+      )}
     </BlogContainer>
   );
 };

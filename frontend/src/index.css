@@ -13,6 +13,14 @@ body {
   overflow-x: hidden;
 }
 
+.codex-editor__redactor {
+  padding-bottom: 0 !important;
+}
+
+.codex-editor--narrow .codex-editor__redactor{
+  margin: 0 !important;
+}
+
 @layer components {
   #first-paragraph {
     @apply opacity-50;

@@ -13,7 +13,7 @@ app.use(prismaMiddleware);
 // app.use("/api/v1/blog/*", authMiddleware);
 
 app.route("/api/v1/user", userRoute);
-app.route("/api/v1/blog/", blog);
+app.route("/api/v1/blog", blog);
 
 app.get("/", (c) => {
   return c.json({

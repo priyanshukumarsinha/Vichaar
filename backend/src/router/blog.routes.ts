@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { createBlog, getBlog, updateBlog, commentOnPost, deleteComment, getComments, likePost, getBlogs } from "../controller/blog.controller";
+import { authMiddleware } from "../middlewares/authMiddleware";
 
 type Bindings = {
   DATABASE_URL: string;
@@ -13,11 +14,11 @@ type Variables = {
 
 const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
-blog.post("/", createBlog);
+blog.post("/create", authMiddleware, createBlog);
 
 blog.put("/", updateBlog);
 
-blog.get(":id", getBlog);
+blog.get("/b/:id", getBlog);
 
 blog.post(":id/comment", commentOnPost);
 
@@ -27,7 +28,7 @@ blog.delete(":id/comment/:commentId", deleteComment);
 
 blog.post(":id/like", likePost);
 
-blog.post("/blogs", getBlogs);
+blog.get("/blogs", getBlogs);
 
 
 export { blog };

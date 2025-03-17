@@ -6,6 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 import { useIsAuthStore } from "../../store/isAuthState";
 import { BACKEND_URL } from "../../constant";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const WritePopup = ({ setShowPreview }: { setShowPreview: Function }) => {
   const user = useIsAuthStore((state) => (state.user))
@@ -13,6 +14,7 @@ const WritePopup = ({ setShowPreview }: { setShowPreview: Function }) => {
   const [subHeading, setSubHeading] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   // const [loading, setLoading] = useState(false);
+  const navigation =useNavigate()
 
   const publish = async() => {
     // setLoading(true);
@@ -20,7 +22,8 @@ const WritePopup = ({ setShowPreview }: { setShowPreview: Function }) => {
     console.log(blogData)
 
     const data = {
-      title: "New Blog",
+      title: heading,
+      subHeading,
       content: JSON.stringify(blogData),
       published: true,
     }
@@ -37,25 +40,19 @@ const WritePopup = ({ setShowPreview }: { setShowPreview: Function }) => {
 
     const response = await axios.post(`${BACKEND_URL}/blog/create`, data, config);
     console.log(response);
+
+    if(response.data.status === "error"){
+      console.log("Error in creating blog");
+    }
+    else{
+      console.log("Blog created successfully");
+      navigation("/me")
+    }
+
+    setShowPreview(false);
+
   }
 
-  // const requestHandler = async() => {
-    
-  //   if(response.data.status === "error"){
-  //     setError(true);
-  //     setErrorMessage(response.data.message);
-  //   }
-  //   else{
-  //     const token = response.data.data.token;
-  //     const user = response.data.data.user;
-  //     localStorage.setItem("token", token);
-  //     localStorage.setItem("user", JSON.stringify(user));
-  //     console.log("Sign up successful");
-  //     handleSuccess();
-  //   }
-
-  //   setLoading(false);
-  // };
 
   return (
     <WritePopupContainer>

@@ -13,6 +13,7 @@ const BlogAuthor = ({
   publishDate: string;
   readTime: string;
 }) => {
+  const date = new Date(publishDate).toDateString();
   return (
     <div
       className={` py-5 pb-10 border-b-1 border-gray-100 flex gap-3 ${className}`}
@@ -25,7 +26,7 @@ const BlogAuthor = ({
           <span className="text-green-600 font-medium text-md">Follow</span>
         </div>
         <p className="text-gray-500 text-sm">
-          {publishDate} <Point /> {readTime}
+          {date} <Point /> {readTime + " mins read"}
         </p>
       </div>
     </div>

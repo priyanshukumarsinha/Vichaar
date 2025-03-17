@@ -22,6 +22,7 @@ const Profile = () => {
   useEffect(() => {
     if (location.pathname === "/me") {
       setIsShowHome(true);
+      setLoading(false);
     } else {
       setIsShowHome(false);
     }

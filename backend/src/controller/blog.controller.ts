@@ -27,8 +27,9 @@ model Post {
 const blogSchema = z.object({
   title: z.string().min(3).max(255),
   content: z.string().min(3),
-  published: z.boolean(),
+  published: z.boolean().optional(),
   image: z.string().optional(),
+  subHeading: z.string().optional()
 });
 
 export const createBlog = async (c: Context) => {
@@ -60,9 +61,10 @@ export const createBlog = async (c: Context) => {
       data: {
         title: validatedBody.title,
         content: validatedBody.content,
-        published: validatedBody.published,
+        published: validatedBody.published || false,
         authorId: userId,
         authorName: author?.name,
+        subHeading: validatedBody.subHeading || "",
         readTime,
       },
     });
@@ -403,6 +405,8 @@ export const getBlogs = async (c: Context) => {
         publishDate: "desc",
       },
     });
+
+    console.log(blogs);
 
     return jsonResponse(c, 200, "success", "Blogs fetched successfully", {
       blogs,
