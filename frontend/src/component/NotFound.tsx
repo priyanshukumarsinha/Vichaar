@@ -1,4 +1,4 @@
-const NotFound = ({ message }: { message: string }) => {
+const NotFound = ({ message }: { message?: string }) => {
   return (
     <div>
       <div className="flex justify-center items-center flex-col font-bold">
