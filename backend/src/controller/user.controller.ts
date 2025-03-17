@@ -115,6 +115,9 @@ export const loginUser = async (c: Context) => {
       where: {
         OR: [{ email: body.email }, { username: body.email }],
       },
+      include: {
+        posts: true, // Include posts in the response
+      },
     });
 
     //  check if user exists
@@ -151,14 +154,11 @@ export const loginUser = async (c: Context) => {
       return jsonResponse(c, 500, "error", "JWT Generation Failed");
     }
 
+    delete user.password;
+
     //   response
     return jsonResponse(c, 200, "success", "User Logged in Successfully", {
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        username: user.username,
-      },
+      user,
       token,
     });
   } catch (error) {
@@ -355,6 +355,9 @@ export const getUserusername = async (c: Context) => {
       where: {
         username,
       },
+      include: {
+        posts: true, // Include posts in the response
+      },
     });
 
     // check if user exists
@@ -368,7 +371,6 @@ export const getUserusername = async (c: Context) => {
     return jsonResponse(c, 200, "success", "User found", {
       user,
     });
-
   } catch (error) {
     console.error("Error getting user:", error);
     return jsonResponse(c, 500, "error", "Internal Server Error");

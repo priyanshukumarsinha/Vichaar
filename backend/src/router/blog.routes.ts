@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { createBlog, getBlog, updateBlog, commentOnPost, deleteComment, getComments, likePost, getBlogs } from "../controller/blog.controller";
+import { createBlog, getBlog, updateBlog, commentOnPost, deleteComment, getComments, likePost, getBlogs, getUserBlogs } from "../controller/blog.controller";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
 type Bindings = {
@@ -29,6 +29,8 @@ blog.delete(":id/comment/:commentId", deleteComment);
 blog.post(":id/like", likePost);
 
 blog.get("/blogs", getBlogs);
+
+blog.get("/u/:username", getUserBlogs);
 
 
 export { blog };

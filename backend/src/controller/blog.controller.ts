@@ -416,3 +416,29 @@ export const getBlogs = async (c: Context) => {
     return jsonResponse(c, 500, "error", "Internal Server Error");
   }
 };
+
+// find all blogs of a user
+export const getUserBlogs = async (c: Context) => {
+  const prisma = c.get("prisma");
+  try {
+    // Extract user Id
+    const userId = c.get("userId");
+
+    // get all blogs of the user
+    const blogs = await prisma.post.findMany({
+      where: {
+        authorId: userId,
+      },
+      orderBy: {
+        publishDate: "desc",
+      },
+    });
+
+    return jsonResponse(c, 200, "success", "Blogs fetched successfully", {
+      blogs,
+    });
+  } catch (error) {
+    console.error("Error fetching user blogs:", error);
+    return jsonResponse(c, 500, "error", "Internal Server Error");
+  }
+};
