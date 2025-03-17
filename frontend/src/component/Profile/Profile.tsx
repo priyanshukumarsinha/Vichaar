@@ -1,34 +1,46 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { BACKEND_URL } from "../../constant";
 import BlogNavbar from "../Blogs/Navbar/BlogNavbar";
 import BlogDesc from "../AllBlogs/BlogDesc";
-import { Link, useLocation } from "react-router-dom";
+import ProfileSidebar from "./ProfileSidebar";
+import ProfileSettings from "./ProfileSettings";
+import ProfileTabs from "./ProfileTabs";
 import EmailModal from "./EmailModel";
 import UsernameModal from "./UsernameModal";
 import DeleteAccountModal from "./DeleteAccountModal";
 import ProfileModal from "./ProfileModal";
-import ProfileSidebar from "./ProfileSidebar";
-import ProfileSettings from "./ProfileSettings";
-import ProfileTabs from "./ProfileTabs";
-import { useIsAuthStore, User } from "../../store/isAuthState";
 import ChangePasswordModal from "./ChangePasswordModal";
-import axios from "axios";
-import { BACKEND_URL } from "../../constant";
+import { useIsAuthStore } from "../../store/isAuthState";
+import { useRef } from "react";
+
+
+interface Blog {
+  id: string;
+  authorName: string;
+  authorImg: string;
+  blogImg: string;
+  title: string;
+  isBookMarked: boolean;
+  likeCount: string;
+  publishDate: string;
+  readTime: string;
+  subHeading: string;
+}
 
 const Profile = () => {
-  const [blogData, setBlogData] = useState([]);
-
   const location = useLocation();
+  const userStore = useIsAuthStore((state) => state.user);
+  const [user, setUser] = useState(userStore);
+  const [blogData, setBlogData] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (location.pathname === "/me") {
-      setIsShowHome(true);
-      setLoading(false);
-    } else {
-      setIsShowHome(false);
-    }
-  }, [location]);
+  const isSelf = location.pathname === "/me" || location.pathname === "/u/";
+  const currentUserId = user?.id || "";
+  const [isAdmin, setIsAdmin] = useState(isSelf);
 
-  const [isShowHome, setIsShowHome] = useState(location.pathname === "/me");
+  const [isShowHome, setIsShowHome] = useState(true);
 
   const [showEmail, setShowEmail] = useState(false);
   const [showUsername, setShowUsername] = useState(false);
@@ -36,70 +48,50 @@ const Profile = () => {
   const [showProfileChange, setShowProfileChange] = useState(false);
   const [deleteAccount, setDeleteAccount] = useState(false);
 
-  const [user, setUser] = useState(useIsAuthStore((state) => state.user));
 
-  const currentUserId = user.id;
-
-  const [findingUser, setFindingUser] = useState<User | null>(null);
-
-  const isSelf = location.pathname === "/me" || location.pathname === "/u/";
-
-  const [isAdmin, setIsAdmin] = useState(isSelf);
-
-  const [loading, setLoading] = useState(isSelf);
-
-  if (!isSelf) {
-    const findingUsername = location.pathname.split("/")[2] || "me";
-
-    useEffect(() => {
-      findUser();
-    }, [location.pathname]); // Ensure it triggers when pathname changes
-
-    const findUser = async () => {
-      console.log("yes");
-      try {
-        const response = await axios.post(
-          `${BACKEND_URL}/user/u/${findingUsername}`
-        );
-        setFindingUser(response.data.data.user);
-        setUser(response.data.data.user);
-        setLoading(false); // Stop loading after the request
-        setIsAdmin(findingUser?.id === currentUserId);
-        setIsShowHome(true);
-        console.log(isAdmin);
-      } catch (error) {
-        console.error("Error fetching user:", error);
-        setLoading(false); // Stop loading in case of error
-      }
-    };
-  }
+  const isAdminSet = useRef(false); // Prevents multiple updates
 
   useEffect(() => {
-    findUsersBlogs();
-  }, []);
+    if (!isSelf) {
+      const username = location.pathname.split("/")[2] || "me";
+      axios
+        .post(`${BACKEND_URL}/user/u/${username}`)
+        .then((res) => {
+          const fetchedUser = res.data.data.user;
+          setUser(fetchedUser);
 
-  const findUsersBlogs = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get(
-        `${BACKEND_URL}/blog/u/${user?.username}`
-      );
-      setBlogData(response.data.data.blogs);
-    } catch (error) {
-      console.error("Error fetching user's blogs:", error);
+          // Set isAdmin only once
+          if (!isAdminSet.current) {
+            setIsAdmin(fetchedUser.id === currentUserId);
+            isAdminSet.current = true; // Lock further updates
+          }
+        })
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
-    
-  };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (user?.username) {
+      setLoading(true);
+      axios
+        .get(`${BACKEND_URL}/blog/u/${user.username}`)
+        .then((res) => setBlogData(res.data.data.blogs))
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [user]);
 
   if (loading) {
-    return <>loading ...</>;
+    return <>Loading...</>;
   }
 
   return (
     <div className="min-h-screen">
       <BlogNavbar />
-      <div className=" flex">
+      <div className="flex">
         <div className="w-full lg:w-[65%] h-screen px-5 sm:px-10 md:px-20 lg:px-25 xl:px-40">
           <p className="text-4xl font-bold my-12">{user?.name}</p>
 
@@ -107,44 +99,42 @@ const Profile = () => {
             <ProfileTabs
               isShowHome={isShowHome}
               setIsShowHome={setIsShowHome}
-              isAdmin={isAdmin}
             />
           )}
+
           {isShowHome ? (
             <div>
-              {blogData.length > 0 && (
-                <>
-                  {blogData.map((blog) => (
-                    <Link to={`/blog/${blog.id}`} key={blog.id}>
-                      <BlogDesc
-                        authorName={blog.authorName}
-                        authorImg={blog.authorImg}
-                        blogImg={blog.blogImg}
-                        title={blog.title}
-                        isBookMarked={blog.isBookMarked}
-                        likeCount={blog.likeCount}
-                        publishDate={blog.publishDate}
-                        readTime={blog.readTime}
-                        subHeading={blog.subHeading}
-                      />
-                    </Link>
-                  ))}
-                </>
+              {blogData.length > 0 ? (
+                blogData.map((blog) => (
+                  <Link to={`/blog/${blog.id}`} key={blog.id}>
+                    <BlogDesc
+                      authorName={blog.authorName}
+                      authorImg={blog.authorImg}
+                      blogImg={blog.blogImg}
+                      title={blog.title}
+                      isBookMarked={blog.isBookMarked}
+                      likeCount={blog.likeCount}
+                      publishDate={blog.publishDate}
+                      readTime={blog.readTime}
+                      subHeading={blog.subHeading}
+                    />
+                  </Link>
+                ))
+              ) : (
+                <p>No blogs found.</p>
               )}
             </div>
           ) : (
-            <>
-              <ProfileSettings
-                email={user?.email || ""}
-                username={user?.username || ""}
-                name={user?.name || ""}
-                onEmailClick={() => setShowEmail(true)}
-                onUsernameClick={() => setShowUsername(true)}
-                onProfileChangeClick={() => setShowProfileChange(true)}
-                onDeleteAccountClick={() => setDeleteAccount(true)}
-                onChangePasswordClick={() => setShowChangePassword(true)}
-              />
-            </>
+            <ProfileSettings
+              email={user?.email || ""}
+              username={user?.username || ""}
+              name={user?.name || ""}
+              onEmailClick={() => setShowEmail(true)}
+              onUsernameClick={() => setShowUsername(true)}
+              onProfileChangeClick={() => setShowProfileChange(true)}
+              onDeleteAccountClick={() => setDeleteAccount(true)}
+              onChangePasswordClick={() => setShowChangePassword(true)}
+            />
           )}
 
           {showEmail && <EmailModal fn={setShowEmail} />}
@@ -159,7 +149,7 @@ const Profile = () => {
         <ProfileSidebar
           isAdmin={isAdmin}
           fn={setIsShowHome}
-          findingUser={findingUser || {}}
+          findingUser={user || {}}
         />
       </div>
     </div>

@@ -3,13 +3,10 @@ import BlogNavButton from "../Blogs/Navbar/BlogNavButton";
 import Modal from "./Modal";
 import axios from "axios";
 import { BACKEND_URL } from "../../constant";
-import { useIsAuthStore } from "../../store/isAuthState";
 import ErrorMessage from "../Popup/Email/ErrorMessage";
 
 const ChangePasswordModal = ({ fn }: { fn: Function }) => {
   const [loading, setLoading] = useState(false);
-  const setUser = useIsAuthStore((state) => state.setUser);
-  const setIsAuth = useIsAuthStore((state) => state.setIsAuth);
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
