@@ -1,3 +1,4 @@
+import { memo } from "react";
 import Logo from "../../Home/Navbar/components/Logo";
 // import SearchInput from "../SearchInput/SearchInput";
 import BlogNavContainer from "./BlogNavContainer";
@@ -16,4 +17,4 @@ const BlogNavbar = () => {
   );
 };
 
-export default BlogNavbar;
+export default memo(BlogNavbar);

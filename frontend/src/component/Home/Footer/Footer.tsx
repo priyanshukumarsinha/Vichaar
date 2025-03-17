@@ -1,3 +1,4 @@
+import { memo } from "react";
 import FooterNavLinks from "./components/FooterNavLinks";
 
 const Footer = ({ className }: { className?: string }) => {
@@ -8,4 +9,4 @@ const Footer = ({ className }: { className?: string }) => {
   );
 };
 
-export default Footer;
+export default memo(Footer);
