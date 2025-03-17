@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 
 const WritePopup = ({ setShowPreview }: { setShowPreview: Function }) => {
   const user = useIsAuthStore((state) => (state.user))
-  const [heading, setHeading] = useState("");
-  const [subHeading, setSubHeading] = useState("");
+  const [heading, setHeading] = useState(localStorage.getItem("heading") || "");
+  const [subHeading, setSubHeading] = useState(localStorage.getItem("subHeading") || "");
   const [tags, setTags] = useState<string[]>([]);
   // const [loading, setLoading] = useState(false);
   const navigation =useNavigate()
@@ -46,6 +46,9 @@ const WritePopup = ({ setShowPreview }: { setShowPreview: Function }) => {
     }
     else{
       console.log("Blog created successfully");
+      localStorage.removeItem("blog");
+      localStorage.removeItem("heading");
+      localStorage.removeItem("subHeading");
       navigation("/me")
     }
 

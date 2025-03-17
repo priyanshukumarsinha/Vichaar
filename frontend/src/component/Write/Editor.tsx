@@ -30,7 +30,7 @@ const Editor = () => {
             placeholder: "",
           },
         },
-        
+
         list: List as any,
         table: Table as any,
         image: {
@@ -75,11 +75,9 @@ const Editor = () => {
           }
         }, 100); // Short delay to ensure rendering
 
-        startAutoSave(); 
-
+        startAutoSave();
       },
     });
-
 
     return () => {
       stopAutoSave();
@@ -96,6 +94,8 @@ const Editor = () => {
         try {
           const data = await editor.current.save();
           localStorage.setItem("blog", JSON.stringify(data));
+          saveHeading();
+          saveSubHeading();
         } catch (error) {
           console.error("Auto-save failed:", error);
         }
@@ -108,6 +108,35 @@ const Editor = () => {
     if (autosaverRef.current) {
       clearInterval(autosaverRef.current);
       autosaverRef.current = null;
+    }
+  };
+
+  // Function to extract 2 lines from first 15 words and save in localstorage
+  const saveSubHeading = async () => {
+    if (editor.current) {
+      const data = await editor.current.save();
+      const firstParagraph = data.blocks.find(
+        (block) => block.type === "paragraph"
+      );
+      if (firstParagraph) {
+        const text = firstParagraph.data.text;
+        const subHeading = text
+          .split(" ")
+          .slice(0, 15)
+          .join(" ") + " ... ";
+        localStorage.setItem("subHeading", subHeading);
+      }
+    }
+  };
+
+  // Function to extract heading from the data and save it in localstorage
+  const saveHeading = async () => {
+    if (editor.current) {
+      const data = await editor.current.save();
+      const heading = data.blocks.find((block) => block.type === "header");
+      if (heading) {
+        localStorage.setItem("heading", heading.data.text);
+      }
     }
   };
 
