@@ -150,7 +150,7 @@ The schema uses **1:1, 1:N, and M:N relationships**, with junction tables for ma
 
 Here is the schema for the Vichaar blogging platform:
 
-![Database Schema](/img/database_schema.png)
+![Database Schema](../img/database_schema.png)
 
 ---
 
