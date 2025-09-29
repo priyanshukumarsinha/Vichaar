@@ -1,0 +1,10 @@
+{
+  "name": "vichaar",
+  "private" : true,
+  "version": "2.0.0",
+  "description": "A platform for sharing and discussing ideas.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
